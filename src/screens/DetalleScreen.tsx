@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Boton } from '../components/Boton';
 import { Cargando, MensajeError } from '../components/EstadosPantalla';
 import { Icono } from '../components/Icono';
@@ -12,6 +12,7 @@ import { ETIQUETA_TIPO } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import type { DetalleObra, MiembroElenco } from '../types/tmdb';
 import { assertNever } from '../utils/assertNever';
+import { mensajeDeError } from '../utils/errores';
 import { formatearVotos } from '../utils/formato';
 import { crearItemId } from '../utils/lista';
 
@@ -63,6 +64,8 @@ function ContenidoDetalle({ obra, onEditar }: { obra: DetalleObra; onEditar: (it
         anio: obra.anio,
         posterPath: obra.posterPath,
       });
+    } catch (error) {
+      Alert.alert('No se pudo agregar', mensajeDeError(error));
     } finally {
       setAgregando(false);
     }

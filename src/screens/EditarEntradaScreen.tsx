@@ -9,6 +9,7 @@ import { useCartelera } from '../context/CarteleraContext';
 import { colores, espacio, radio } from '../theme/tema';
 import { ESTADOS, ETIQUETA_ESTADO, ETIQUETA_TIPO, MAX_COMENTARIO, type EstadoVisto, type ItemLista } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
+import { mensajeDeError } from '../utils/errores';
 
 export function EditarEntradaScreen({ route, navigation }: RootStackScreenProps<'EditarEntrada'>) {
   const { obtenerItem } = useCartelera();
@@ -49,8 +50,8 @@ function FormularioEntrada({ item, onTerminar }: { item: ItemLista; onTerminar: 
     try {
       await actualizar(item.id, { estado, calificacionPersonal: calificacion, comentario });
       onTerminar();
-    } catch {
-      Alert.alert('No se pudo guardar', 'Intenta de nuevo en unos segundos.');
+    } catch (error) {
+      Alert.alert('No se pudo guardar', mensajeDeError(error));
     } finally {
       setGuardando(false);
     }
@@ -66,8 +67,8 @@ function FormularioEntrada({ item, onTerminar }: { item: ItemLista; onTerminar: 
           try {
             await eliminar(item.id);
             onTerminar();
-          } catch {
-            Alert.alert('No se pudo quitar', 'Intenta de nuevo en unos segundos.');
+          } catch (error) {
+            Alert.alert('No se pudo quitar', mensajeDeError(error));
           }
         },
       },

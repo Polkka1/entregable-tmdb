@@ -1,5 +1,7 @@
 // Cliente HTTP genérico: tiempo máximo, cancelación y errores traducidos al español.
 
+import { ErrorApp } from '../utils/errores';
+
 export type CodigoErrorHttp =
   | 'sin_conexion'
   | 'tiempo_agotado'
@@ -21,14 +23,12 @@ const MENSAJE_ERROR: Record<CodigoErrorHttp, string> = {
   desconocido: 'Ocurrió un error inesperado.',
 };
 
-export class ErrorHttp extends Error {
-  readonly codigo: CodigoErrorHttp;
+export class ErrorHttp extends ErrorApp<CodigoErrorHttp> {
   readonly status: number | null;
 
   constructor(codigo: CodigoErrorHttp, status: number | null = null, mensaje = MENSAJE_ERROR[codigo]) {
-    super(mensaje);
+    super(codigo, mensaje);
     this.name = 'ErrorHttp';
-    this.codigo = codigo;
     this.status = status;
   }
 }
@@ -89,10 +89,4 @@ export async function obtenerJson<T>(
 
 export function esCancelacion(error: unknown): boolean {
   return error instanceof ErrorHttp && error.codigo === 'cancelado';
-}
-
-/** Convierte cualquier error en un mensaje apto para mostrar al usuario. */
-export function mensajeDeError(error: unknown): string {
-  if (error instanceof ErrorHttp) return error.message;
-  return MENSAJE_ERROR.desconocido;
 }

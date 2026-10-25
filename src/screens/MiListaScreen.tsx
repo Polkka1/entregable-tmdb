@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
+import { FlatList, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { AvisoSinConexion } from '../components/AvisoSinConexion';
 import { Chip } from '../components/Chip';
-import { MensajeVacio } from '../components/EstadosPantalla';
+import { Cargando, MensajeVacio } from '../components/EstadosPantalla';
 import { TarjetaLista } from '../components/TarjetaLista';
 import { useCartelera } from '../context/CarteleraContext';
 import { colores, espacio } from '../theme/tema';
@@ -23,7 +24,8 @@ const ETIQUETA_TIPO_PLURAL: Record<TipoMedio, string> = {
 };
 
 export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
-  const { lista } = useCartelera();
+  const { lista, cargando, sinConexion, refrescar } = useCartelera();
+  const [refrescando, setRefrescando] = useState(false);
   const [filtroEstado, setFiltroEstado] = useState<Filtro<EstadoVisto>>('todos');
   const [filtroTipo, setFiltroTipo] = useState<Filtro<TipoMedio>>('todos');
 
@@ -48,9 +50,24 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
     [navigation],
   );
 
+  const alRefrescar = async () => {
+    setRefrescando(true);
+    await refrescar();
+    setRefrescando(false);
+  };
+
+  if (cargando) {
+    return (
+      <View style={styles.pantalla}>
+        <Cargando texto="Cargando tu lista…" />
+      </View>
+    );
+  }
+
   if (lista.length === 0) {
     return (
       <View style={styles.pantalla}>
+        {sinConexion && <AvisoSinConexion />}
         <MensajeVacio
           icono="bookmark-outline"
           titulo="Tu lista está vacía"
@@ -63,6 +80,7 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
 
   return (
     <View style={styles.pantalla}>
+      {sinConexion && <AvisoSinConexion />}
       <View style={styles.filtros}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filaChips}>
           <Chip etiqueta={`Todos (${lista.length})`} seleccionado={filtroEstado === 'todos'} onPress={() => setFiltroEstado('todos')} />
@@ -94,6 +112,9 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
         renderItem={({ item }) => <TarjetaLista item={item} onPress={abrirEditor} />}
         contentContainerStyle={[styles.lista, filtrada.length === 0 && styles.listaVacia]}
         ItemSeparatorComponent={Separador}
+        refreshControl={
+          <RefreshControl refreshing={refrescando} onRefresh={alRefrescar} tintColor={colores.acento} colors={[colores.acento]} />
+        }
         ListEmptyComponent={
           <MensajeVacio icono="funnel-outline" titulo="Nada por aquí" descripcion="No hay obras con estos filtros." />
         }

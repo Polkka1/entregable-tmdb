@@ -37,17 +37,26 @@ y la API pública de TMDB, escrita en TypeScript y ejecutable en un dispositivo 
 | Paso | Contenido | Estado |
 | --- | --- | --- |
 | 1 | Proyecto Expo + TypeScript, estructura de carpetas, navegación | ✅ |
-| 1 | Firebase Auth (login, registro, sesión persistente) | ⏳ Pendiente |
+| 1 | Firebase Auth (login, registro, sesión persistente) | ✅ |
 | 2 | Servicio de TMDB, pantallas Buscar y Detalle | ✅ |
-| 3 | Mi lista y Editar mi entrada (interfaz y reglas) | ✅ En memoria |
-| 3 | Firestore, caché en AsyncStorage y modo sin conexión | ⏳ Pendiente |
-| 3 | Reglas de seguridad (`firestore.rules`) | ⏳ Pendiente |
+| 3 | Mi lista y Editar mi entrada | ✅ |
+| 3 | Firestore, caché en AsyncStorage y modo sin conexión | ✅ |
+| 3 | Reglas de seguridad ([`firestore.rules`](firestore.rules)) | ✅ Falta probarlas con dos cuentas |
+| — | Capturas en `docs/` | ⏳ Pendiente |
 
 ## Requisitos
 
 - Node.js 20 o superior
 - App **Expo Go** en el teléfono (o un emulador Android / simulador iOS)
 - Una cuenta de TMDB con acceso a la API (uso no comercial)
+- Un proyecto de Firebase con una app web registrada
+
+### Configurar Firebase
+
+1. **Authentication → Método de acceso:** habilitar **Correo electrónico/contraseña**.
+2. **Firestore Database:** crear la base de datos (modo producción).
+3. **Firestore Database → Reglas:** pegar el contenido de [`firestore.rules`](firestore.rules) y publicar.
+4. **Configuración del proyecto → Tus apps → App web:** copiar los valores de `firebaseConfig` al `.env`.
 
 ## Instalación
 
@@ -66,6 +75,12 @@ Escanea el código QR con Expo Go (Android) o con la cámara (iOS).
 | Variable | Descripción |
 | --- | --- |
 | `EXPO_PUBLIC_TMDB_TOKEN` | **API Read Access Token** de TMDB ([Ajustes → API](https://www.themoviedb.org/settings/api)). Se envía como `Authorization: Bearer <token>`. |
+| `EXPO_PUBLIC_FIREBASE_API_KEY` | `apiKey` de `firebaseConfig` |
+| `EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN` | `authDomain` |
+| `EXPO_PUBLIC_FIREBASE_PROJECT_ID` | `projectId` |
+| `EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET` | `storageBucket` |
+| `EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | `messagingSenderId` |
+| `EXPO_PUBLIC_FIREBASE_APP_ID` | `appId` |
 
 Para probar el token fuera de la app:
 
@@ -78,7 +93,8 @@ curl -H "Authorization: Bearer $EXPO_PUBLIC_TMDB_TOKEN" \
 > alguien podría extraerlo. Para este proyecto no comercial el riesgo se acepta: el token solo
 > permite leer el catálogo público de TMDB y el archivo `.env` no se sube al repositorio
 > (está en `.gitignore`). La solución de fondo sería un proxy en un servidor propio que guarde
-> el token.
+> el token. La configuración web de Firebase no es secreta (identifica el proyecto); lo que
+> protege los datos son las reglas de Firestore.
 
 ### Scripts
 
@@ -97,24 +113,59 @@ curl -H "Authorization: Bearer $EXPO_PUBLIC_TMDB_TOKEN" \
 | Estado global | Context API | Usuario, lista personal y acciones |
 | Servicios | `src/services/` | Único lugar donde se llama a Firebase y a TMDB |
 | API externa | TMDB v3 | Catálogo de películas y series |
-| Autenticación / BD / caché | Firebase Auth, Firestore, AsyncStorage | *(Paso 3 y 4)* |
+| Autenticación | Firebase Auth | Cuentas de usuario; sesión guardada en AsyncStorage |
+| Base de datos | Firestore | Lista personal, aislada por usuario |
+| Caché local | AsyncStorage | Copia de la lista para uso sin conexión |
 
 ```
 App.tsx                     Proveedores y navegación raíz
 src/
 ├── components/             Componentes reutilizables (Poster, Boton, Chip, Estrellas, TmdbLogo…)
 ├── config/env.ts           Lectura de variables de entorno
-├── context/                CarteleraContext: lista personal y acciones
+├── context/                SesionContext (usuario) y CarteleraContext (lista y acciones)
 ├── hooks/                  usePeticion<T>, useBusqueda, useDebounce
 ├── navigation/             RootNavigator (pila) y TabsNavigator (pestañas)
 ├── screens/                Una pantalla por archivo
 ├── services/
+│   ├── firebase.ts         Inicialización de Firebase (Auth con persistencia y Firestore)
+│   ├── authService.ts      Registro, inicio y cierre de sesión; errores traducidos
+│   ├── listaService.ts     CRUD de usuarios/{uid}/mi_lista con serverTimestamp y tiempo máximo
+│   ├── cacheService.ts     Copia de la lista en AsyncStorage
 │   ├── http.ts             fetch genérico con tiempo máximo, cancelación y errores en español
 │   └── tmdbService.ts      buscar, obtenerDetalle, construirUrlImagen
 ├── theme/tema.ts           Colores, espacios y alto mínimo tocable (44 px)
 ├── types/                  Tipos de dominio, de la API de TMDB, de navegación y EstadoPeticion<T>
 └── utils/                  Funciones puras (formato, itemId, regla de calificación, assertNever)
+firestore.rules             Reglas de seguridad publicadas en Firestore
 ```
+
+### Modelo de datos en Firestore
+
+Ruta: `usuarios/{uid}/mi_lista/{itemId}`. El `itemId` combina tipo y id de TMDB
+(`movie_550`, `tv_1399`), lo que impide guardar la misma obra dos veces.
+
+| Campo | Tipo | Descripción |
+| --- | --- | --- |
+| `tmdbId` | número | Id de la obra en TMDB |
+| `tipo` | `'movie'` | `'tv'` | Película o serie |
+| `titulo` | texto | Copiado de TMDB al agregar |
+| `anio` | texto | Año de estreno o primera emisión |
+| `posterPath` | texto o nulo | Solo la ruta; la URL se arma al mostrarla |
+| `estado` | `'por_ver'` | `'viendo'` | `'vista'` | Estado de visionado |
+| `calificacionPersonal` | número o nulo | 1 a 5; solo si el estado es `vista` |
+| `comentario` | texto | Hasta 500 caracteres |
+| `agregadoEn` / `actualizadoEn` | marca de tiempo | `serverTimestamp()` |
+
+Las reglas permiten leer y escribir solo al dueño (`request.auth.uid == uid`) y validan en el
+servidor los campos permitidos, sus tipos, el formato del `itemId`, el límite del comentario,
+la regla "solo se califica si está vista" y que al editar no cambien los datos copiados de TMDB.
+
+### Modo sin conexión
+
+Al abrir Mi lista se muestra primero la copia de AsyncStorage y luego se reemplaza con la de
+Firestore. Si no hay internet (detectado con `expo-network`) o el servidor no responde en 10 s,
+se mantiene la última copia con un aviso y los cambios quedan bloqueados hasta reconectar; al
+volver la conexión la lista se sincroniza sola.
 
 ### Integración con TMDB
 

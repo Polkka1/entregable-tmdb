@@ -1,15 +1,40 @@
 import Constants from 'expo-constants';
-import { Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Alert, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { TmdbLogo } from '../components/TmdbLogo';
+import { useSesion } from '../context/SesionContext';
 import { colores, espacio, radio } from '../theme/tema';
+import { mensajeDeError } from '../utils/errores';
 
 const AVISO_TMDB = 'This product uses the TMDB API but is not endorsed or certified by TMDB.';
 const URL_TMDB = 'https://www.themoviedb.org/';
 
 export function AcercaDeScreen() {
   const version = Constants.expoConfig?.version ?? '—';
+  const { usuario, cerrarSesion } = useSesion();
+  const [saliendo, setSaliendo] = useState(false);
+
+  const confirmarCierre = () => {
+    Alert.alert('Cerrar sesión', '¿Quieres cerrar tu sesión?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Cerrar sesión',
+        style: 'destructive',
+        onPress: async () => {
+          setSaliendo(true);
+          try {
+            // Al cerrar sesión la navegación vuelve sola a Login.
+            await cerrarSesion();
+          } catch (error) {
+            setSaliendo(false);
+            Alert.alert('No se pudo cerrar sesión', mensajeDeError(error));
+          }
+        },
+      },
+    ]);
+  };
 
   return (
     <ScrollView style={styles.pantalla} contentContainerStyle={styles.contenido}>
@@ -53,7 +78,19 @@ export function AcercaDeScreen() {
         <Text style={styles.parrafoSecundario}>React Native + Expo · TypeScript · Firebase · TMDB</Text>
       </View>
 
-      {/* Paso 4: botón "Cerrar sesión" (Firebase Auth) */}
+      <View style={styles.tarjeta}>
+        <Text style={styles.subtitulo} accessibilityRole="header">
+          Mi cuenta
+        </Text>
+        <Text style={styles.parrafoSecundario}>{usuario?.email ?? 'Sin correo'}</Text>
+        <Boton
+          titulo="Cerrar sesión"
+          icono="log-out-outline"
+          variante="peligro"
+          cargando={saliendo}
+          onPress={confirmarCierre}
+        />
+      </View>
     </ScrollView>
   );
 }

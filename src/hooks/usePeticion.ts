@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { esCancelacion, mensajeDeError } from '../services/http';
+import { esCancelacion } from '../services/http';
 import type { EstadoPeticion } from '../types/peticion';
+import { mensajeDeError } from '../utils/errores';
 
 type EstadoTerminado<T> = Exclude<EstadoPeticion<T>, { tipo: 'cargando' }>;
 

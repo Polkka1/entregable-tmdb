@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { esCancelacion, mensajeDeError } from '../services/http';
+import { esCancelacion } from '../services/http';
 import { buscar } from '../services/tmdbService';
 import type { EstadoPeticion } from '../types/peticion';
 import type { PaginaResultados, ResultadoBusqueda } from '../types/tmdb';
+import { mensajeDeError } from '../utils/errores';
 import { crearItemId } from '../utils/lista';
 import { useDebounce } from './useDebounce';
 

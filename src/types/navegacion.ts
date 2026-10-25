@@ -10,6 +10,9 @@ export type TabsParamList = {
 };
 
 export type RootStackParamList = {
+  // Sin sesión
+  Login: undefined;
+  // Con sesión
   Tabs: NavigatorScreenParams<TabsParamList>;
   Detalle: { tipo: TipoMedio; id: number; titulo: string };
   EditarEntrada: { itemId: string };

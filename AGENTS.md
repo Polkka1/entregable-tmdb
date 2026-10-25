@@ -25,9 +25,17 @@ Run lint and typecheck before declaring any task done.
 
 ## Navigation & Routing
 
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
+- The course assignment requires **React Navigation** (native stack + bottom tabs), not Expo Router. Navigators live in `src/navigation/`, screens in `src/screens/`, and param lists in `src/types/navegacion.ts`.
+
+## Project rules (from the assignment)
+
+- Screens never call Firebase or TMDB directly; only `src/services/` does.
+- Every request handles loading, error and success (`EstadoPeticion<T>` in `src/types/peticion.ts`).
+- Avoid `any`; if one is unavoidable, justify it with a comment.
+- Touchable elements are at least 44 px tall (`ALTURA_TOCABLE_MIN` in `src/theme/tema.ts`).
+- Destructive actions ask for confirmation.
+- `.env` is never committed; keep `.env.example` in sync.
+- Code identifiers, comments and UI text are in Spanish.
 
 ## Building with EAS
 

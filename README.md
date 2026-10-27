@@ -41,8 +41,8 @@ y la API pública de TMDB, escrita en TypeScript y ejecutable en un dispositivo 
 | 2 | Servicio de TMDB, pantallas Buscar y Detalle | ✅ |
 | 3 | Mi lista y Editar mi entrada | ✅ |
 | 3 | Firestore, caché en AsyncStorage y modo sin conexión | ✅ |
-| 3 | Reglas de seguridad ([`firestore.rules`](firestore.rules)) | ✅ Falta probarlas con dos cuentas |
-| — | Capturas en `docs/` | ⏳ Pendiente |
+| 3 | Reglas de seguridad ([`firestore.rules`](firestore.rules)), probadas con dos cuentas | ✅ |
+| — | [Capturas](#capturas) y [bitácora de IA](docs/BITACORA_IA.md) | ✅ |
 
 ## Requisitos
 
@@ -181,6 +181,25 @@ volver la conexión la lista se sincroniza sola.
   alternativo), sin elenco, búsqueda sin resultados, sin conexión, tiempo agotado (10 s),
   token inválido (401) y límite de peticiones (429).
 
+## Capturas
+
+**Authentication → Users:** las dos cuentas de prueba.
+
+![Usuarios en Firebase Authentication](docs/auth-usuarios.png)
+
+**Firestore:** la subcolección `usuarios/{uid}/mi_lista` de cuenta1 con tres obras. Los ids siguen
+el formato `tipo_tmdbId`.
+
+![Subcolección mi_lista en Firestore](docs/firestore-mi-lista.png)
+
+**Rules Playground:** la lectura de la lista de cuenta1 se deniega sin autenticación…
+
+![Lectura denegada sin autenticación](docs/reglas-sin-autenticacion.png)
+
+…y también autenticado como cuenta2: con los UID reales de ambas cuentas, `esDueno(uid)` da `false`.
+
+![Lectura denegada a cuenta2](docs/reglas-cuenta2-denegada.png)
+
 ## Créditos y términos de uso
 
 <img src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" width="120" />
@@ -191,5 +210,5 @@ Uso gratuito y solo no comercial, según los [términos de TMDB](https://www.the
 
 ## Uso de IA
 
-Este proyecto usa asistencia de IA (Claude Code) para generar código, que el equipo revisa y
-debe poder explicar. Detalle en la bitácora de IA.
+Este proyecto usó asistencia de IA (Claude Code) para generar código, que el equipo revisó y
+puede explicar. El detalle está en la [bitácora de IA](docs/BITACORA_IA.md).

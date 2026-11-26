@@ -1,7 +1,8 @@
 // Vistas reutilizables para los estados de una petición: cargando, error y vacío.
 
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio } from '../tema/tema';
+import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { textoProgreso } from '../utils/textosResumen';
 import { Boton } from './Boton';
 import { Icono, type NombreIcono } from './Icono';
 
@@ -25,6 +26,28 @@ export function MensajeError({ mensaje, onReintentar }: { mensaje: string; onRei
           <Boton titulo="Reintentar" icono="refresh" variante="secundario" onPress={onReintentar} />
         </View>
       )}
+    </View>
+  );
+}
+
+/** D6: avance del completado de datos de TMDB. Va encima del contenido, no lo reemplaza. */
+export function Progreso({ hechas, total }: { hechas: number; total: number }) {
+  const porcentaje = total === 0 ? 0 : Math.round((hechas / total) * 100);
+  return (
+    <View
+      style={styles.progreso}
+      accessible
+      accessibilityRole="progressbar"
+      accessibilityLabel="Completando datos"
+      accessibilityValue={{ min: 0, max: total, now: hechas, text: textoProgreso(hechas, total) }}
+    >
+      <View style={styles.progresoCabeza}>
+        <Text style={styles.progresoTitulo}>Completando datos</Text>
+        <Text style={styles.progresoTexto}>{textoProgreso(hechas, total)}</Text>
+      </View>
+      <View style={styles.pista}>
+        <View style={[styles.relleno, { width: `${porcentaje}%` }]} />
+      </View>
     </View>
   );
 }
@@ -74,5 +97,36 @@ const styles = StyleSheet.create({
   accion: {
     marginTop: espacio.md,
     alignSelf: 'stretch',
+  },
+  progreso: {
+    gap: espacio.sm,
+    padding: espacio.md,
+    borderRadius: radio.md,
+    backgroundColor: colores.superficie,
+  },
+  progresoCabeza: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: espacio.sm,
+  },
+  progresoTitulo: {
+    ...tipografia.secundario,
+    fontWeight: '600',
+    color: colores.texto,
+  },
+  progresoTexto: {
+    ...tipografia.secundario,
+    color: colores.textoSecundario,
+  },
+  pista: {
+    height: espacio.sm,
+    borderRadius: radio.pill,
+    backgroundColor: colores.borde,
+    overflow: 'hidden',
+  },
+  relleno: {
+    height: '100%',
+    borderRadius: radio.pill,
+    backgroundColor: colores.acento,
   },
 });

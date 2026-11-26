@@ -30,9 +30,9 @@ Sistema de diseño de la app móvil. Léelo antes de crear o modificar cualquier
 
 ## 2. Tokens
 
-Se exportan desde `src/tema/tema.ts` como `colores`, `tipografia`, `espacio`, `radio` y
+Se exportan desde `src/tema/tema.ts` como `colores`, `tipografia`, `espacio`, `colorEstado` y
 `ALTURA_TOCABLE_MIN`. Ningún archivo fuera de `src/tema/` escribe un color en hexadecimal ni un
-tamaño de letra suelto.
+tamaño de letra suelto, y ninguna pantalla ni componente redondea esquinas (§2.4).
 
 ### 2.1 Colores
 
@@ -80,10 +80,16 @@ Fuente del sistema; no se cargan fuentes. `tipografia.<nombre>` es un objeto con
 `espacio.xs` 4 · `sm` 8 · `md` 12 · `lg` 16 · `xl` 24 · `xxl` 32 · `xxxl` 48. El margen lateral de
 toda pantalla es `lg`; la separación entre tarjetas, `md`.
 
-### 2.4 Radio
+### 2.4 Forma: esquinas rectas
 
-`radio.sm` 6 (póster, insignias de aviso) · `md` 10 (botón, tarjeta de obra) · `lg` 16 (tarjeta
-de dato, destacada, barras) · `pill` 999 (chips e insignias de estado).
+**Ningún elemento tiene bordes redondeados** (decisión del estudiante, 2026-11-26): botones, chips,
+tarjetas, pósteres, insignias, avisos, barras, la barra de progreso y los puntos de estado tienen
+esquinas rectas. No hay token de radio, y ningún archivo de `src/screens/`, `src/components/` o
+`src/navigation/` escribe `borderRadius` (lo vigila `src/tema/sinBordesRedondeados.test.ts`). La
+forma se separa con bordes de 1 px y con el contraste entre `fondo`, `superficie` y
+`superficieAlta`. Las únicas excepciones no son elementos propios de la app: el indicador de carga
+nativo (`ActivityIndicator`), que el sistema dibuja circular, y el logo oficial de TMDB, que no se
+modifica.
 
 ### 2.5 Toque
 
@@ -99,11 +105,11 @@ nuevo, revisa si uno de estos lo cubre.
 
 **`Boton`** · `variante: 'primario' | 'secundario' | 'peligro'`, `icono?`, `cargando?`,
 `deshabilitado?`. Primario: fondo `acento` y texto `textoSobreAcento`. Secundario: fondo
-`superficieAlta` con borde. Peligro: transparente, borde y texto `error`. Alto 48, radio `md`,
+`superficieAlta` con borde. Peligro: transparente, borde y texto `error`. Alto 48, esquinas rectas,
 texto `cuerpo` 600.
 
 **`Chip`** · opción de un solo valor (filtros, selector de estado, selector de año). Alto 44,
-radio `pill`. Normal: fondo `superficie` con borde. Seleccionado: fondo `acento` y texto
+esquinas rectas. Normal: fondo `superficie` con borde. Seleccionado: fondo `acento` y texto
 `textoSobreAcento`, o el color de su estado en el selector de estado.
 
 **`SelectorEstado`** · tres `Chip` (*Por ver*, *Viendo*, *Vista*) con un punto del color de su
@@ -116,14 +122,14 @@ Solo lectura: tamaño 14 a 18.
 
 **`TarjetaObra`** (hoy `TarjetaLista`) · póster 64 × 96, título (`cuerpo` 600), meta
 (`secundario`), insignia de estado (borde y texto del color del estado, con punto) y estrellas de
-solo lectura si hay calificación. Fondo `superficie`, radio `md`.
+solo lectura si hay calificación. Fondo `superficie`, esquinas rectas.
 
 **`TarjetaResultado`**, **`Poster`**, **`Icono`** (Ionicons de `@expo/vector-icons`) y
 **`TmdbLogo`** se conservan. `TmdbLogo` toma sus colores de `colores.tmdb1` a `tmdb3`.
 
 ### De la épica Mi año en cine
 
-**`TarjetaDato`** · `rotulo`, `valor`, `detalle?`, `falta?`. Fondo `superficie`, radio `lg`,
+**`TarjetaDato`** · `rotulo`, `valor`, `detalle?`, `falta?`. Fondo `superficie`, esquinas rectas,
 padding `lg`. Rótulo en `etiqueta`, valor en `dato` (o `subtitulo` si es un nombre), detalle en
 `secundario`. Si `falta` existe, va debajo, separado por un borde, en `secundario` con un ícono
 de información.
@@ -214,6 +220,7 @@ Los plurales se resuelven en una función, no con "(s)" en pantalla.
 | Una insignia con punto **y** texto "Vista" | Un punto verde sin texto |
 | "Aún no hay datos suficientes para elegir un director." | Una tarjeta con "—" o con 0 |
 | `celebracion` en la obra destacada | `celebracion` en un botón |
+| Esquinas rectas, separadas por bordes de 1 px | `borderRadius` en cualquier pantalla o componente |
 | Reutilizar `Boton`, `Chip` y `TarjetaDato` | Un `Pressable` con estilos nuevos en cada pantalla |
 | El logo de TMDB en Acerca de, más pequeño que el wordmark | El logo de TMDB en *Mi año en cine* o más grande que la marca |
 

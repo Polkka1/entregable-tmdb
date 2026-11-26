@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio } from '../tema/tema';
+import { colores, espacio, radio, tipografia } from '../tema/tema';
 import { ETIQUETA_TIPO } from '../types/lista';
 import type { ResultadoBusqueda } from '../types/tmdb';
 import { Icono } from './Icono';
@@ -32,7 +32,7 @@ function TarjetaResultadoBase({ resultado, enMiLista, onPress }: Props) {
         </Text>
         {enMiLista && (
           <View style={styles.enLista}>
-            <Icono name="checkmark-circle" size={14} color={colores.exito} />
+            <Icono name="checkmark-circle" size={14} color={colores.estadoVista} />
             <Text style={styles.enListaTexto}>En mi lista</Text>
           </View>
         )}
@@ -62,12 +62,12 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: colores.texto,
-    fontSize: 16,
+    ...tipografia.cuerpo,
     fontWeight: '600',
   },
   meta: {
     color: colores.textoSecundario,
-    fontSize: 14,
+    ...tipografia.secundario,
   },
   enLista: {
     flexDirection: 'row',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     gap: espacio.xs,
   },
   enListaTexto: {
-    color: colores.exito,
-    fontSize: 13,
+    color: colores.estadoVista,
+    ...tipografia.secundario,
   },
 });

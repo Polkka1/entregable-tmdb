@@ -6,7 +6,7 @@ import { Icono } from '../components/Icono';
 import { TarjetaResultado } from '../components/TarjetaResultado';
 import { useCartelera } from '../context/CarteleraContext';
 import { useBusqueda, type EstadoBusqueda } from '../hooks/useBusqueda';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
 import type { TabsScreenProps } from '../types/navegacion';
 import type { ResultadoBusqueda } from '../types/tmdb';
 import { assertNever } from '../utils/assertNever';
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: ALTURA_TOCABLE_MIN + 4,
     color: colores.texto,
-    fontSize: 16,
+    ...tipografia.cuerpo,
   },
   borrar: {
     minWidth: ALTURA_TOCABLE_MIN,
@@ -163,12 +163,12 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
   },
   errorMas: {
-    color: colores.peligro,
+    color: colores.error,
     textAlign: 'center',
   },
   finLista: {
     color: colores.textoSecundario,
     textAlign: 'center',
-    fontSize: 13,
+    ...tipografia.secundario,
   },
 });

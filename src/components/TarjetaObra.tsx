@@ -1,23 +1,17 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio } from '../tema/tema';
-import { ETIQUETA_ESTADO, ETIQUETA_TIPO, type EstadoVisto, type ItemLista } from '../types/lista';
+import { colores, espacio, radio, tipografia, colorEstado } from '../tema/tema';
+import { ETIQUETA_ESTADO, ETIQUETA_TIPO, type ItemLista } from '../types/lista';
 import { Estrellas } from './Estrellas';
 import { Icono } from './Icono';
 import { Poster } from './Poster';
-
-const COLOR_ESTADO: Record<EstadoVisto, string> = {
-  por_ver: colores.textoSecundario,
-  viendo: colores.acento,
-  vista: colores.exito,
-};
 
 interface Props {
   item: ItemLista;
   onPress: (item: ItemLista) => void;
 }
 
-function TarjetaListaBase({ item, onPress }: Props) {
+function TarjetaObraBase({ item, onPress }: Props) {
   const { titulo, anio, tipo, posterPath, estado, calificacionPersonal, comentario } = item;
   return (
     <Pressable
@@ -36,8 +30,9 @@ function TarjetaListaBase({ item, onPress }: Props) {
           {anio || 'Sin fecha'} · {ETIQUETA_TIPO[tipo]}
         </Text>
         <View style={styles.fila}>
-          <View style={[styles.insignia, { borderColor: COLOR_ESTADO[estado] }]}>
-            <Text style={[styles.insigniaTexto, { color: COLOR_ESTADO[estado] }]}>{ETIQUETA_ESTADO[estado]}</Text>
+          <View style={[styles.insignia, { borderColor: colorEstado[estado] }]}>
+            <View style={[styles.punto, { backgroundColor: colorEstado[estado] }]} />
+            <Text style={[styles.insigniaTexto, { color: colorEstado[estado] }]}>{ETIQUETA_ESTADO[estado]}</Text>
           </View>
           {calificacionPersonal !== null && <Estrellas valor={calificacionPersonal} tamano={14} />}
         </View>
@@ -52,7 +47,7 @@ function TarjetaListaBase({ item, onPress }: Props) {
   );
 }
 
-export const TarjetaLista = memo(TarjetaListaBase);
+export const TarjetaObra = memo(TarjetaObraBase);
 
 const styles = StyleSheet.create({
   tarjeta: {
@@ -72,31 +67,39 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: colores.texto,
-    fontSize: 16,
+    ...tipografia.cuerpo,
     fontWeight: '600',
   },
   meta: {
     color: colores.textoSecundario,
-    fontSize: 14,
+    ...tipografia.secundario,
   },
   fila: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: espacio.sm,
   },
+  punto: {
+    width: 6,
+    height: 6,
+    borderRadius: radio.pill,
+  },
   insignia: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: espacio.xs,
     borderWidth: 1,
     borderRadius: radio.pill,
     paddingHorizontal: espacio.sm,
     paddingVertical: 2,
   },
   insigniaTexto: {
-    fontSize: 12,
+    ...tipografia.etiqueta,
     fontWeight: '600',
   },
   comentario: {
     color: colores.textoSecundario,
-    fontSize: 13,
+    ...tipografia.secundario,
     fontStyle: 'italic',
   },
 });

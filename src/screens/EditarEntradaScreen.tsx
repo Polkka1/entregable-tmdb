@@ -1,20 +1,14 @@
 import { useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Boton } from '../components/Boton';
-import { Chip } from '../components/Chip';
+
 import { MensajeVacio } from '../components/EstadosPantalla';
 import { Estrellas } from '../components/Estrellas';
 import { Poster } from '../components/Poster';
+import { SelectorEstado } from '../components/SelectorEstado';
 import { useCartelera } from '../context/CarteleraContext';
-import { colores, espacio, radio } from '../tema/tema';
-import {
-  ESTADOS,
-  ETIQUETA_ESTADO,
-  ETIQUETA_TIPO,
-  MAX_COMENTARIO,
-  type EstadoVisto,
-  type ItemLista,
-} from '../types/lista';
+import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { ETIQUETA_ESTADO, ETIQUETA_TIPO, MAX_COMENTARIO, type EstadoVisto, type ItemLista } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import { mensajeDeError } from '../utils/errores';
 
@@ -99,16 +93,7 @@ function FormularioEntrada({ item, onTerminar }: { item: ItemLista; onTerminar: 
 
         <View style={styles.seccion}>
           <Text style={styles.etiqueta}>Estado</Text>
-          <View style={styles.filaChips} accessibilityRole="radiogroup">
-            {ESTADOS.map((e) => (
-              <Chip
-                key={e}
-                etiqueta={ETIQUETA_ESTADO[e]}
-                seleccionado={estado === e}
-                onPress={() => cambiarEstado(e)}
-              />
-            ))}
-          </View>
+          <SelectorEstado valor={estado} onCambiar={cambiarEstado} />
         </View>
 
         <View style={styles.seccion}>
@@ -166,29 +151,24 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: colores.texto,
-    fontSize: 18,
+    ...tipografia.subtitulo,
     fontWeight: '700',
   },
   meta: {
     color: colores.textoSecundario,
-    fontSize: 14,
+    ...tipografia.secundario,
   },
   seccion: {
     gap: espacio.sm,
   },
   etiqueta: {
     color: colores.texto,
-    fontSize: 16,
+    ...tipografia.cuerpo,
     fontWeight: '600',
-  },
-  filaChips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: espacio.sm,
   },
   ayuda: {
     color: colores.textoSecundario,
-    fontSize: 13,
+    ...tipografia.secundario,
   },
   comentario: {
     minHeight: 120,
@@ -198,11 +178,11 @@ const styles = StyleSheet.create({
     borderColor: colores.borde,
     backgroundColor: colores.superficie,
     color: colores.texto,
-    fontSize: 15,
+    ...tipografia.cuerpo,
   },
   contador: {
     color: colores.textoSecundario,
-    fontSize: 12,
+    ...tipografia.etiqueta,
     textAlign: 'right',
   },
   acciones: {

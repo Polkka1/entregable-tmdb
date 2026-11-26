@@ -8,7 +8,7 @@ import { useCartelera } from '../context/CarteleraContext';
 import { datosParaGuardar } from '../dominio/datosTmdb';
 import { usePeticion } from '../hooks/usePeticion';
 import { obtenerDetalle } from '../services/tmdbService';
-import { colores, espacio } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { ETIQUETA_TIPO } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import type { DetalleObra, MiembroElenco } from '../types/tmdb';
@@ -84,7 +84,7 @@ function ContenidoDetalle({ obra, onEditar }: { obra: DetalleObra; onEditar: (it
           <Text style={styles.meta}>{meta}</Text>
           {obra.generos.length > 0 && <Text style={styles.generos}>{obra.generos.join(', ')}</Text>}
           <View style={styles.calificacion} accessible accessibilityLabel={textoCalificacion(obra)}>
-            <Icono name="star" size={18} color={colores.estrella} />
+            <Icono name="star" size={18} color={colores.celebracion} />
             {obra.votos > 0 ? (
               <Text style={styles.calificacionTexto}>
                 {obra.calificacion.toFixed(1)}
@@ -180,16 +180,16 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: colores.texto,
-    fontSize: 22,
+    ...tipografia.titulo,
     fontWeight: '700',
   },
   meta: {
     color: colores.textoSecundario,
-    fontSize: 14,
+    ...tipografia.secundario,
   },
   generos: {
     color: colores.textoSecundario,
-    fontSize: 13,
+    ...tipografia.secundario,
   },
   calificacion: {
     flexDirection: 'row',
@@ -199,12 +199,12 @@ const styles = StyleSheet.create({
   },
   calificacionTexto: {
     color: colores.texto,
-    fontSize: 18,
+    ...tipografia.subtitulo,
     fontWeight: '700',
   },
   calificacionSecundaria: {
     color: colores.textoSecundario,
-    fontSize: 13,
+    ...tipografia.secundario,
     fontWeight: '400',
   },
   seccion: {
@@ -212,17 +212,16 @@ const styles = StyleSheet.create({
   },
   subtitulo: {
     color: colores.texto,
-    fontSize: 18,
+    ...tipografia.subtitulo,
     fontWeight: '600',
   },
   parrafo: {
     color: colores.texto,
-    fontSize: 15,
-    lineHeight: 22,
+    ...tipografia.cuerpo,
   },
   parrafoAlternativo: {
     color: colores.textoSecundario,
-    fontSize: 15,
+    ...tipografia.cuerpo,
     fontStyle: 'italic',
   },
   elenco: {
@@ -234,11 +233,11 @@ const styles = StyleSheet.create({
   },
   actorNombre: {
     color: colores.texto,
-    fontSize: 13,
+    ...tipografia.secundario,
     fontWeight: '600',
   },
   actorPersonaje: {
     color: colores.textoSecundario,
-    fontSize: 12,
+    ...tipografia.etiqueta,
   },
 });

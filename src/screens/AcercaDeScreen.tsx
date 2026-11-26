@@ -5,7 +5,7 @@ import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { TmdbLogo } from '../components/TmdbLogo';
 import { useSesion } from '../context/SesionContext';
-import { colores, espacio, radio } from '../tema/tema';
+import { colores, espacio, radio, tipografia } from '../tema/tema';
 import { mensajeDeError } from '../utils/errores';
 
 const AVISO_TMDB = 'This product uses the TMDB API but is not endorsed or certified by TMDB.';
@@ -40,9 +40,12 @@ export function AcercaDeScreen() {
     <ScrollView style={styles.pantalla} contentContainerStyle={styles.contenido}>
       {/* Marca de la app: debe ser más prominente que el logo de TMDB */}
       <View style={styles.marca}>
-        <Icono name="film" size={64} color={colores.acento} />
-        <Text style={styles.nombreApp} accessibilityRole="header">
-          Mi Cartelera Personal
+        {/* Wordmark (DESIGN.md §4): isotipo con fondo acento y "Cartelera" en el color de acento */}
+        <View style={styles.isotipo}>
+          <Icono name="film" size={36} color={colores.textoSobreAcento} />
+        </View>
+        <Text style={styles.nombreApp} accessibilityRole="header" accessibilityLabel="Mi Cartelera Personal">
+          Mi <Text style={styles.nombreAcento}>Cartelera</Text> Personal
         </Text>
         <Text style={styles.version}>Versión {version}</Text>
       </View>
@@ -56,7 +59,7 @@ export function AcercaDeScreen() {
         <Text style={styles.subtitulo} accessibilityRole="header">
           Datos y créditos
         </Text>
-        <TmdbLogo ancho={120} />
+        <TmdbLogo ancho={96} />
         <Text style={styles.aviso}>{AVISO_TMDB}</Text>
         <Text style={styles.parrafoSecundario}>
           Los datos de películas y series, las imágenes y el elenco provienen de The Movie Database (TMDB). Esta app es
@@ -110,20 +113,30 @@ const styles = StyleSheet.create({
     gap: espacio.sm,
     paddingTop: espacio.lg,
   },
+  isotipo: {
+    width: 64,
+    height: 64,
+    borderRadius: radio.lg,
+    backgroundColor: colores.acento,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nombreAcento: {
+    color: colores.acento,
+  },
   nombreApp: {
     color: colores.texto,
-    fontSize: 28,
+    ...tipografia.titulo,
     fontWeight: '800',
     textAlign: 'center',
   },
   version: {
     color: colores.textoSecundario,
-    fontSize: 14,
+    ...tipografia.secundario,
   },
   parrafo: {
     color: colores.texto,
-    fontSize: 15,
-    lineHeight: 22,
+    ...tipografia.cuerpo,
     textAlign: 'center',
   },
   tarjeta: {
@@ -134,17 +147,16 @@ const styles = StyleSheet.create({
   },
   subtitulo: {
     color: colores.texto,
-    fontSize: 17,
+    ...tipografia.subtitulo,
     fontWeight: '600',
   },
   aviso: {
     color: colores.texto,
-    fontSize: 14,
+    ...tipografia.secundario,
     fontStyle: 'italic',
   },
   parrafoSecundario: {
     color: colores.textoSecundario,
-    fontSize: 14,
-    lineHeight: 20,
+    ...tipografia.secundario,
   },
 });

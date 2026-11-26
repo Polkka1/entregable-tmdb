@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
 
 interface Props {
@@ -9,10 +9,12 @@ interface Props {
   colorSeleccionado?: string;
   /** Texto para lectores de pantalla, si debe ser distinto de la etiqueta (por ejemplo "Año 2025"). */
   descripcion?: string;
+  /** Punto de color antes de la etiqueta (por ejemplo, el color de un estado). */
+  colorPunto?: string;
 }
 
 /** Opción de filtro o selector de un solo valor (DESIGN.md §3). */
-export function Chip({ etiqueta, seleccionado, onPress, colorSeleccionado, descripcion }: Props) {
+export function Chip({ etiqueta, seleccionado, onPress, colorSeleccionado, descripcion, colorPunto }: Props) {
   const relleno = colorSeleccionado ?? colores.acento;
   return (
     <Pressable
@@ -26,6 +28,9 @@ export function Chip({ etiqueta, seleccionado, onPress, colorSeleccionado, descr
         pressed && styles.presionado,
       ]}
     >
+      {colorPunto && (
+        <View style={[styles.punto, { backgroundColor: seleccionado ? colores.textoSobreAcento : colorPunto }]} />
+      )}
       <Text style={[styles.texto, seleccionado && styles.textoSeleccionado]}>{etiqueta}</Text>
     </Pressable>
   );
@@ -39,8 +44,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colores.borde,
     backgroundColor: colores.superficie,
+    flexDirection: 'row',
+    gap: espacio.sm,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  punto: {
+    width: 8,
+    height: 8,
+    borderRadius: radio.pill,
   },
   presionado: {
     opacity: 0.8,

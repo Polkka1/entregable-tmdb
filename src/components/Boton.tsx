@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
 import { Icono, type NombreIcono } from './Icono';
 
 type Variante = 'primario' | 'secundario' | 'peligro';
@@ -16,7 +16,7 @@ interface Props {
 const COLOR_TEXTO: Record<Variante, string> = {
   primario: colores.textoSobreAcento,
   secundario: colores.texto,
-  peligro: colores.peligro,
+  peligro: colores.error,
 };
 
 export function Boton({
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   peligro: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: colores.peligro,
+    borderColor: colores.error,
   },
   presionado: {
     opacity: 0.8,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     gap: espacio.sm,
   },
   texto: {
-    fontSize: 16,
+    ...tipografia.cuerpo,
     fontWeight: '600',
   },
 });

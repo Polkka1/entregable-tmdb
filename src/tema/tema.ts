@@ -1,6 +1,7 @@
 // Tokens de diseño: la única fuente de verdad de colores, tipografía, espacios y tamaños.
 // Los valores y su uso están en DESIGN.md §2 y en docs/diseno/brand-board.html.
 import type { TextStyle } from 'react-native';
+import type { EstadoVisto } from '../types/lista';
 
 const paleta = {
   fondo: '#0F1115',
@@ -23,15 +24,14 @@ const paleta = {
   tmdb3: '#00B3E5',
 } as const;
 
-export const colores = {
-  ...paleta,
-  /** @deprecated Usa `error`. Se borra al pasar las pantallas del Proyecto 3 a los tokens (T-A10). */
-  peligro: paleta.error,
-  /** @deprecated Usa `estadoVista`. Se borra en T-A10. */
-  exito: paleta.estadoVista,
-  /** @deprecated Usa `celebracion`. Se borra en T-A10. */
-  estrella: paleta.celebracion,
-} as const;
+export const colores = paleta;
+
+/** Color de cada estado (DESIGN.md §2.1): siempre acompañado de su texto. */
+export const colorEstado: Record<EstadoVisto, string> = {
+  por_ver: paleta.estadoPorVer,
+  viendo: paleta.estadoViendo,
+  vista: paleta.estadoVista,
+};
 
 type EstiloTexto = Required<Pick<TextStyle, 'fontSize' | 'lineHeight' | 'fontWeight'>>;
 

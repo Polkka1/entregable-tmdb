@@ -3,7 +3,7 @@ import { FlatList, RefreshControl, ScrollView, StyleSheet, View } from 'react-na
 import { AvisoSinConexion } from '../components/AvisoSinConexion';
 import { Chip } from '../components/Chip';
 import { Cargando, MensajeVacio } from '../components/EstadosPantalla';
-import { TarjetaLista } from '../components/TarjetaLista';
+import { TarjetaObra } from '../components/TarjetaObra';
 import { useCartelera } from '../context/CarteleraContext';
 import { colores, espacio } from '../tema/tema';
 import { ESTADOS, ETIQUETA_ESTADO, TIPOS, type EstadoVisto, type ItemLista, type TipoMedio } from '../types/lista';
@@ -59,7 +59,11 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
   if (lista.length === 0) {
     return (
       <View style={styles.pantalla}>
-        {sinConexion && <AvisoSinConexion />}
+        {sinConexion && (
+          <View style={styles.aviso}>
+            <AvisoSinConexion />
+          </View>
+        )}
         <MensajeVacio
           icono="bookmark-outline"
           titulo="Tu lista está vacía"
@@ -72,7 +76,11 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
 
   return (
     <View style={styles.pantalla}>
-      {sinConexion && <AvisoSinConexion />}
+      {sinConexion && (
+        <View style={styles.aviso}>
+          <AvisoSinConexion />
+        </View>
+      )}
       <View style={styles.filtros}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filaChips}>
           <Chip
@@ -105,7 +113,7 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
       <FlatList
         data={filtrada}
         keyExtractor={(i) => i.id}
-        renderItem={({ item }) => <TarjetaLista item={item} onPress={abrirEditor} />}
+        renderItem={({ item }) => <TarjetaObra item={item} onPress={abrirEditor} />}
         contentContainerStyle={[styles.lista, filtrada.length === 0 && styles.listaVacia]}
         ItemSeparatorComponent={Separador}
         refreshControl={
@@ -132,6 +140,10 @@ const styles = StyleSheet.create({
   pantalla: {
     flex: 1,
     backgroundColor: colores.fondo,
+  },
+  aviso: {
+    paddingHorizontal: espacio.lg,
+    paddingTop: espacio.md,
   },
   filtros: {
     paddingVertical: espacio.md,

@@ -26,7 +26,7 @@ export function MensajeError({
 }) {
   return (
     <View style={styles.centro} accessibilityLiveRegion="assertive">
-      <Icono name="alert-circle-outline" size={48} color={colores.peligro} />
+      <Icono name="alert-circle-outline" size={48} color={colores.error} />
       <Text style={styles.titulo}>{titulo}</Text>
       <Text style={styles.descripcion}>{mensaje}</Text>
       {onReintentar && (
@@ -92,15 +92,14 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: colores.texto,
-    fontSize: 18,
+    ...tipografia.subtitulo,
     fontWeight: '600',
     textAlign: 'center',
   },
   descripcion: {
     color: colores.textoSecundario,
-    fontSize: 15,
+    ...tipografia.cuerpo,
     textAlign: 'center',
-    lineHeight: 21,
   },
   accion: {
     marginTop: espacio.md,

@@ -13,7 +13,7 @@ import {
 import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { useSesion } from '../context/SesionContext';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
 import { mensajeDeError } from '../utils/errores';
 
 type Modo = 'iniciar' | 'registro';
@@ -135,7 +135,7 @@ export function LoginScreen() {
 
         {errorServidor && (
           <View style={styles.errorServidor} accessibilityLiveRegion="assertive">
-            <Icono name="alert-circle-outline" size={20} color={colores.peligro} />
+            <Icono name="alert-circle-outline" size={20} color={colores.error} />
             <Text style={styles.errorServidorTexto}>{errorServidor}</Text>
           </View>
         )}
@@ -184,12 +184,12 @@ const styles = StyleSheet.create({
   },
   nombreApp: {
     color: colores.texto,
-    fontSize: 26,
+    ...tipografia.titulo,
     fontWeight: '800',
   },
   titulo: {
     color: colores.texto,
-    fontSize: 20,
+    ...tipografia.subtitulo,
     fontWeight: '600',
   },
   campo: {
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   etiqueta: {
     color: colores.texto,
-    fontSize: 14,
+    ...tipografia.secundario,
     fontWeight: '500',
   },
   input: {
@@ -208,14 +208,14 @@ const styles = StyleSheet.create({
     borderColor: colores.borde,
     backgroundColor: colores.superficie,
     color: colores.texto,
-    fontSize: 16,
+    ...tipografia.cuerpo,
   },
   inputError: {
-    borderColor: colores.peligro,
+    borderColor: colores.error,
   },
   error: {
-    color: colores.peligro,
-    fontSize: 13,
+    color: colores.error,
+    ...tipografia.secundario,
   },
   errorServidor: {
     flexDirection: 'row',
@@ -225,12 +225,12 @@ const styles = StyleSheet.create({
     borderRadius: radio.md,
     backgroundColor: colores.superficie,
     borderWidth: 1,
-    borderColor: colores.peligro,
+    borderColor: colores.error,
   },
   errorServidorTexto: {
     flex: 1,
     color: colores.texto,
-    fontSize: 14,
+    ...tipografia.secundario,
   },
   alternar: {
     minHeight: ALTURA_TOCABLE_MIN,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   },
   alternarTexto: {
     color: colores.acento,
-    fontSize: 15,
+    ...tipografia.cuerpo,
     fontWeight: '600',
   },
 });

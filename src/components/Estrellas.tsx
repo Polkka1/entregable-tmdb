@@ -20,7 +20,7 @@ export function Estrellas({ valor, onCambiar, deshabilitado = false, tamano = 18
     return (
       <View style={styles.fila} accessible accessibilityLabel={`Calificación: ${actual} de ${CALIFICACION_MAX}`}>
         {VALORES.map((n) => (
-          <Icono key={n} name={n <= actual ? 'star' : 'star-outline'} size={tamano} color={colores.estrella} />
+          <Icono key={n} name={n <= actual ? 'star' : 'star-outline'} size={tamano} color={colores.celebracion} />
         ))}
       </View>
     );
@@ -38,7 +38,7 @@ export function Estrellas({ valor, onCambiar, deshabilitado = false, tamano = 18
           accessibilityState={{ selected: n <= actual, disabled: deshabilitado }}
           style={[styles.tocable, deshabilitado && styles.deshabilitado]}
         >
-          <Icono name={n <= actual ? 'star' : 'star-outline'} size={tamano} color={colores.estrella} />
+          <Icono name={n <= actual ? 'star' : 'star-outline'} size={tamano} color={colores.celebracion} />
         </Pressable>
       ))}
     </View>

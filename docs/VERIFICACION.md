@@ -26,7 +26,7 @@ de TMDB, que cubre cada regla:
 ```bash
 node --env-file=.env scripts/sembrarDatosPrueba.mjs                    # crea las obras
 node --env-file=.env scripts/sembrarDatosPrueba.mjs --solo-anteriores  # sin el grupo "anterior a la épica"
-node --env-file=.env scripts/sembrarDatosPrueba.mjs --borrar           # borra solo las obras que creó
+node --env-file=.env scripts/sembrarDatosPrueba.mjs --borrar           # borra solo las obras que creó (las que tienen el comentario "Dato de prueba")
 ```
 
 - Pide el correo y la contraseña de la cuenta en la terminal. Las credenciales no se guardan en
@@ -79,12 +79,12 @@ Antes de empezar: cierra Expo Go y vuelve a abrir la app, para que cargue la ver
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.4.1 | Con una obra *Vista* antigua (sin `vistaEn`), abrir la pestaña **Mi año** con conexión | En la consola, la obra recibe `vistaEn` = su `actualizadoEn` anterior, y cuenta en ese año | ✅ |
-| CA-A.4.4 | Revisar ese documento | Estado, calificación, comentario y datos de TMDB siguen iguales | ✅ |
-| CA-A.4.5 | Con obras vistas del año sin `generos` (anteriores a la épica), abrir **Mi año** | Se ve "Completando datos · n de m obras"; al terminar, las obras tienen `generos` en la consola | ✅ |
-| CA-A.4.7 | Si alguna obra no se pudo completar | Aviso "1 obra quedó sin datos de TMDB: …" | ✅ |
-| CA-A.4.8 | Activar el modo avión durante el completado, salir, desactivarlo y reiniciar la app | Las obras que fallaron se vuelven a intentar | ✅ |
-| CA-A.4.10 | Cambiar de año mientras se completan datos | Se detiene el del año anterior y sigue con el nuevo | ✅ |
+| CA-A.4.1 | Con una obra *Vista* antigua (sin `vistaEn`), abrir la pestaña **Mi año** con conexión | En la consola, la obra recibe `vistaEn` = su `actualizadoEn` anterior, y cuenta en ese año | ❌ |
+| CA-A.4.4 | Revisar ese documento | Estado, calificación, comentario y datos de TMDB siguen iguales | ❌ |
+| CA-A.4.5 | Con obras vistas del año sin `generos` (anteriores a la épica), abrir **Mi año** | Se ve "Completando datos · n de m obras"; al terminar, las obras tienen `generos` en la consola | ❌ |
+| CA-A.4.7 | Si alguna obra no se pudo completar | Aviso "1 obra quedó sin datos de TMDB: …" | ❌ |
+| CA-A.4.8 | Activar el modo avión durante el completado, salir, desactivarlo y reiniciar la app | Las obras que fallaron se vuelven a intentar | ❌ |
+| CA-A.4.10 | Cambiar de año mientras se completan datos | Se detiene el del año anterior y sigue con el nuevo | ❌ |
 
 ### HU-A.2 · Resumen del año
 
@@ -105,7 +105,7 @@ Antes de empezar: cierra Expo Go y vuelve a abrir la app, para que cargue la ver
 | CA-A.3.5 | Abrir **Mi año** | El selector está en el año actual | ✅ |
 | CA-A.3.1 | Mirar los años del selector | Solo años con obras vistas, más el actual, del más reciente al más antiguo | ✅ |
 | CA-A.3.6 | Elegir otro año | Todas las tarjetas cambian a ese año | ✅ |
-| CA-A.3.7 | Elegir un año sin obras vistas (o el actual, si no hay) | "Aún no hay obras vistas en {año}." con *Ir a Mi lista*, que abre Mi lista (`docs/resumen-vacio.png`) | ✅ |
+| CA-A.3.7 | Elegir un año sin obras vistas (o el actual, si no hay) | "Aún no hay obras vistas en {año}." con *Ir a Mi lista*, que abre Mi lista (`docs/resumen-vacio.jpeg`) | ✅ |
 
 ### HU-A.5 · Estados
 
@@ -113,22 +113,23 @@ Antes de empezar: cierra Expo Go y vuelve a abrir la app, para que cargue la ver
 |---|---|---|---|
 | CA-A.5.1 | Abrir **Mi año** justo después de iniciar la app | "Preparando tu año…" con indicador | ✅ |
 | CA-A.5.3 | Modo avión → reiniciar la app → abrir **Mi año** | El resumen sale de la copia local, con el aviso sin conexión; nada cambia en la consola | ✅ |
-| CA-A.5.4 | Igual que la anterior, con alguna obra vista sin fecha | El aviso dice cuántas obras vistas aún no tienen fecha | |
-| CA-A.5.2 | (Difícil de provocar) Un error del servidor al migrar | Mensaje "No pudimos preparar tu resumen." con *Reintentar* | |
+| CA-A.5.4 | Igual que la anterior, con alguna obra vista sin fecha | El aviso dice cuántas obras vistas aún no tienen fecha | ✅ |
+| CA-A.5.2 | (Difícil de provocar) Un error del servidor al migrar | Mensaje "No pudimos preparar tu resumen." con *Reintentar* | ❌ |
 
 ### Proyecto 3 con el diseño nuevo
 
 | Comprobación | Resultado esperado | Resultado obtenido |
 |---|---|---|
-| Buscar, Detalle, Mi lista, Editar y Login | Se ven con la paleta nueva (acento violeta, estados en color con texto), sin textos cortados | |
-| Editar mi entrada | El selector de estado rellena el chip con el color de su estado; las estrellas son doradas | |
-| Acerca de | Wordmark con "Cartelera" en violeta; logo de TMDB más pequeño, con el aviso | |
-| Quitar una obra y cerrar sesión | Siguen pidiendo confirmación | |
+| Buscar, Detalle, Mi lista, Editar y Login | Se ven con la paleta nueva (acento violeta, estados en color con texto), sin textos cortados | ✅ |
+| Editar mi entrada | El selector de estado rellena el chip con el color de su estado; las estrellas son doradas | ✅ |
+| Acerca de | Wordmark con "Cartelera" en violeta; logo de TMDB más pequeño, con el aviso | ✅ |
+| Quitar una obra y cerrar sesión | Siguen pidiendo confirmación | ✅ |
 
-**Captura del resumen con datos:** `docs/resumen-con-datos.png`.
+**Captura del resumen con datos:** `docs/resumen-con-datos.jpeg`.
 
 ## 4. Lo que falló y cómo quedó
 
 | Criterio | Qué pasó | Decisión (corregido / anotado en la auditoría) |
 |---|---|---|
-| | | |
+| Obras anteriores a la épica | Me olvidé de dejar obras guardadas como vistas antes de la versión nueva | Continuar |
+| CA-A.3.7 (año vacío) | En el estado vacío, los chips del selector de año se estiran y ocupan media pantalla (`docs/resumen-vacio.jpeg`). El `ScrollView` horizontal de `SelectorAnio` crece por defecto (`flexGrow: 1`) y reparte el espacio libre con `MensajeVacio` | Corregido: `SelectorAnio` con `flexGrow: 0`. Hay que repetir la captura |

@@ -11,6 +11,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+  Timestamp,
   updateDoc,
   type DocumentData,
   type FieldValue,
@@ -34,7 +35,8 @@ const TIEMPO_MAXIMO_MS = 10_000;
 const MENSAJE_TIEMPO = 'No se pudo contactar al servidor. Revisa tu conexión e intenta de nuevo.';
 
 /** Lo que se guarda en Firestore: el itemId es el id del documento, no un campo. */
-type DocumentoItem = Omit<ItemLista, 'id'> & { agregadoEn: FieldValue; actualizadoEn: FieldValue };
+type CampoEpica = 'vistaEn' | 'generos' | 'duracionMin' | 'directores';
+type DocumentoItem = Omit<ItemLista, 'id' | CampoEpica> & { agregadoEn: FieldValue; actualizadoEn: FieldValue };
 
 const MENSAJE_ERROR_FIRESTORE: Record<string, string> = {
   'permission-denied': 'No tienes permiso para realizar esta acción.',
@@ -73,6 +75,10 @@ function esTipo(valor: unknown): valor is TipoMedio {
   return typeof valor === 'string' && (TIPOS as readonly string[]).includes(valor);
 }
 
+function esListaDeTexto(valor: unknown): valor is string[] {
+  return Array.isArray(valor) && valor.every((v) => typeof v === 'string');
+}
+
 function aItemLista(id: string, d: DocumentData): ItemLista | null {
   if (!esTipo(d.tipo) || !esEstado(d.estado) || typeof d.tmdbId !== 'number') return null;
   return {
@@ -85,6 +91,11 @@ function aItemLista(id: string, d: DocumentData): ItemLista | null {
     estado: d.estado,
     calificacionPersonal: typeof d.calificacionPersonal === 'number' ? d.calificacionPersonal : null,
     comentario: typeof d.comentario === 'string' ? d.comentario : '',
+    vistaEn: d.vistaEn instanceof Timestamp ? d.vistaEn.toMillis() : null,
+    // Un campo ausente significa "sin datos de TMDB" (PA-2).
+    generos: esListaDeTexto(d.generos) ? d.generos : null,
+    duracionMin: typeof d.duracionMin === 'number' ? d.duracionMin : null,
+    directores: esListaDeTexto(d.directores) ? d.directores : null,
   };
 }
 
@@ -104,7 +115,7 @@ export function agregarItem(uid: string, entrada: NuevaEntrada): Promise<ItemLis
     if ((await getDoc(ref)).exists()) {
       throw new ErrorApp('duplicado', 'Esta obra ya está en tu lista.');
     }
-    const datos: Omit<ItemLista, 'id'> = {
+    const datos: Omit<ItemLista, 'id' | CampoEpica> = {
       ...entrada,
       estado: ESTADO_INICIAL,
       calificacionPersonal: null,
@@ -112,7 +123,7 @@ export function agregarItem(uid: string, entrada: NuevaEntrada): Promise<ItemLis
     };
     const documento: DocumentoItem = { ...datos, agregadoEn: serverTimestamp(), actualizadoEn: serverTimestamp() };
     await setDoc(ref, documento);
-    return { ...datos, id };
+    return { ...datos, id, vistaEn: null, generos: null, duracionMin: null, directores: null };
   });
 }
 

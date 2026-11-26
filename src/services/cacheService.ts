@@ -25,7 +25,17 @@ export async function leerCopiaLista(uid: string): Promise<ItemLista[] | null> {
       return null;
     }
     // La copia la escribió esta misma app con guardarCopiaLista, así que se confía en su forma.
-    return copia.items as ItemLista[];
+    // Una copia anterior a la épica Mi año en cine no trae los campos nuevos: quedan en null.
+    return (copia.items as Partial<ItemLista>[]).map(
+      (item) =>
+        ({
+          ...item,
+          vistaEn: item.vistaEn ?? null,
+          generos: item.generos ?? null,
+          duracionMin: item.duracionMin ?? null,
+          directores: item.directores ?? null,
+        }) as ItemLista,
+    );
   } catch {
     return null;
   }

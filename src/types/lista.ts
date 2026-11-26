@@ -16,6 +16,22 @@ export interface ItemLista {
   /** De 1 a 5; solo si el estado es 'vista' */
   calificacionPersonal: number | null;
   comentario: string;
+  // Campos de la épica Mi año en cine (PRD §7.4, spec 01 §4.2)
+  /** Cuándo pasó a vista, en milisegundos desde 1970 (UTC). null si no está vista o si aún no se migró (D1, D2). */
+  vistaEn: number | null;
+  /** Géneros de TMDB en español. null = sin datos de TMDB: el campo no existe en Firestore (PA-2). */
+  generos: string[] | null;
+  /** Duración en minutos. null en series, sin dato o sin datos de TMDB (D5). */
+  duracionMin: number | null;
+  /** Directores de la película. [] en series; null = sin datos de TMDB (D5). */
+  directores: string[] | null;
+}
+
+/** Datos de TMDB que se guardan al agregar o al completar una obra (D5, D6). */
+export interface DatosTmdb {
+  generos: string[];
+  duracionMin: number | null;
+  directores: string[];
 }
 
 /** Datos copiados de TMDB al agregar una obra a la lista. */

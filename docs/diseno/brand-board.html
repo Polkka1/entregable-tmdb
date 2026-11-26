@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brand board · Mi Cartelera Personal</title>
+    <style>
+      /* Tokens: los mismos nombres y valores que DESIGN.md y src/tema/ */
+      :root {
+        --fondo: #0f1115;
+        --superficie: #1a1d24;
+        --superficieAlta: #252932;
+        --borde: #2f3440;
+        --texto: #f2f3f5;
+        --textoSecundario: #a3a9b5;
+        --acento: #9d8cff;
+        --textoSobreAcento: #0f1115;
+        --celebracion: #f5c542;
+        --textoSobreCelebracion: #1a1206;
+        --porVer: #9dadc4;
+        --viendo: #4cc9f0;
+        --vista: #45d49b;
+        --error: #ff6b6b;
+        --tmdb1: #90cea1;
+        --tmdb2: #3cbec9;
+        --tmdb3: #00b3e5;
+
+        --xs: 4px;
+        --sm: 8px;
+        --md: 12px;
+        --lg: 16px;
+        --xl: 24px;
+        --xxl: 32px;
+        --xxxl: 48px;
+        --radio-sm: 6px;
+        --radio-md: 10px;
+        --radio-lg: 16px;
+        --pill: 999px;
+        --tocable: 44px;
+
+        --fuente: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #08090c;
+        color: var(--texto);
+        font-family: var(--fuente);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+      }
+      header.board {
+        margin-bottom: 48px;
+      }
+      header.board p {
+        color: var(--textoSecundario);
+        max-width: 760px;
+      }
+      h1 {
+        font-size: 40px;
+        line-height: 48px;
+        margin: 0 0 8px;
+      }
+      h2 {
+        font-size: 24px;
+        margin: 64px 0 8px;
+        padding-top: 24px;
+        border-top: 1px solid var(--borde);
+      }
+      h2 + p.intro {
+        color: var(--textoSecundario);
+        margin: 0 0 24px;
+        max-width: 760px;
+      }
+      h3 {
+        font-size: 18px;
+        margin: 32px 0 12px;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 13px;
+        color: var(--textoSecundario);
+      }
+      .nota {
+        color: var(--textoSecundario);
+        font-size: 14px;
+      }
+      .rejilla {
+        display: grid;
+        gap: 16px;
+      }
+      .rejilla.dos {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+      .rejilla.tres {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .lamina {
+        background: var(--fondo);
+        border: 1px solid var(--borde);
+        border-radius: var(--radio-lg);
+        padding: 24px;
+      }
+      .lamina > .rotulo {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--textoSecundario);
+        margin-bottom: 16px;
+      }
+
+      /* ---------- Marca ---------- */
+      .wordmark {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .wordmark .isotipo {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: var(--acento);
+        display: grid;
+        place-items: center;
+      }
+      .wordmark .nombre {
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1.1;
+      }
+      .wordmark .nombre span {
+        color: var(--acento);
+      }
+      .tmdb {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--borde);
+      }
+      .tmdb p {
+        margin: 0;
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      /* ---------- Color ---------- */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--borde);
+        vertical-align: middle;
+      }
+      th {
+        color: var(--textoSecundario);
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .muestra {
+        width: 40px;
+        height: 28px;
+        border-radius: var(--radio-sm);
+        border: 1px solid var(--borde);
+      }
+      .ok {
+        color: var(--vista);
+        font-weight: 600;
+      }
+
+      /* ---------- Tipografía ---------- */
+      .tipo {
+        display: grid;
+        grid-template-columns: 150px 1fr 200px;
+        align-items: baseline;
+        gap: 16px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--borde);
+      }
+      .tipo code {
+        font-size: 12px;
+      }
+      .t-display {
+        font-size: 40px;
+        line-height: 48px;
+        font-weight: 800;
+      }
+      .t-dato {
+        font-size: 32px;
+        line-height: 38px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .t-titulo {
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: 700;
+      }
+      .t-subtitulo {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 600;
+      }
+      .t-cuerpo {
+        font-size: 16px;
+        line-height: 22px;
+      }
+      .t-secundario {
+        font-size: 14px;
+        line-height: 20px;
+        color: var(--textoSecundario);
+      }
+      .t-etiqueta {
+        font-size: 12px;
+        line-height: 16px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--textoSecundario);
+      }
+
+      /* ---------- Espacio y forma ---------- */
+      .escala {
+        display: flex;
+        align-items: flex-end;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .escala div {
+        text-align: center;
+        font-size: 12px;
+        color: var(--textoSecundario);
+      }
+      .escala span {
+        display: block;
+        background: var(--acento);
+        margin: 0 auto 6px;
+      }
+      .radios {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .radios div {
+        width: 88px;
+        height: 64px;
+        background: var(--superficieAlta);
+        border: 1px solid var(--borde);
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        color: var(--textoSecundario);
+      }
+      .tocable-demo {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .tocable-demo .caja {
+        height: 44px;
+        min-width: 44px;
+        border: 1px dashed var(--acento);
+        border-radius: var(--radio-sm);
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+        color: var(--acento);
+        padding: 0 8px;
+      }
+
+      /* ======================================================
+         COMPONENTES (lo que se ve en la app)
+         ====================================================== */
+      .app {
+        font-family: var(--fuente);
+        color: var(--texto);
+      }
+
+      /* Botón */
+      .boton {
+        min-height: 48px;
+        padding: 0 16px;
+        border-radius: var(--radio-md);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        border: 1px solid transparent;
+        width: 100%;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .boton.primario {
+        background: var(--acento);
+        color: var(--textoSobreAcento);
+      }
+      .boton.secundario {
+        background: var(--superficieAlta);
+        color: var(--texto);
+        border-color: var(--borde);
+      }
+      .boton.peligro {
+        background: transparent;
+        color: var(--error);
+        border-color: var(--error);
+      }
+
+      /* Chip y selector de estado */
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .chip {
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: var(--pill);
+        border: 1px solid var(--borde);
+        background: var(--superficie);
+        color: var(--texto);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .chip .punto {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .chip.sel-porVer {
+        background: var(--porVer);
+        border-color: var(--porVer);
+        color: var(--fondo);
+      }
+      .chip.sel-viendo {
+        background: var(--viendo);
+        border-color: var(--viendo);
+        color: var(--fondo);
+      }
+      .chip.sel-vista {
+        background: var(--vista);
+        border-color: var(--vista);
+        color: var(--fondo);
+      }
+      .chip.sel-acento {
+        background: var(--acento);
+        border-color: var(--acento);
+        color: var(--textoSobreAcento);
+      }
+
+      /* Estrellas */
+      .estrellas {
+        display: flex;
+      }
+      .estrellas .estrella {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        font-size: 28px;
+        color: var(--celebracion);
+      }
+      .estrellas.chicas .estrella {
+        width: auto;
+        height: auto;
+        font-size: 14px;
+      }
+      .estrellas .vacia {
+        color: var(--borde);
+      }
+
+      /* Póster de relleno (sin imágenes reales en el board) */
+      .poster {
+        border-radius: var(--radio-sm);
+        background: linear-gradient(160deg, #3a2f6b, #1d1636 60%, #120e22);
+        display: grid;
+        place-items: end start;
+        padding: 6px;
+        font-size: 10px;
+        color: var(--textoSecundario);
+        flex: none;
+      }
+      .poster.b {
+        background: linear-gradient(160deg, #6b4f1d, #2d2210 60%, #141007);
+      }
+      .poster.c {
+        background: linear-gradient(160deg, #1d5b6b, #10282d 60%, #081214);
+      }
+
+      /* Tarjeta de obra */
+      .tarjeta-obra {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        padding: 8px;
+        border-radius: var(--radio-md);
+        background: var(--superficie);
+      }
+      .tarjeta-obra .info {
+        flex: 1;
+        display: grid;
+        gap: 4px;
+      }
+      .tarjeta-obra .titulo {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .tarjeta-obra .meta {
+        font-size: 14px;
+        color: var(--textoSecundario);
+      }
+      .insignia {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid;
+        border-radius: var(--pill);
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .insignia .punto {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .fila {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Tarjeta de dato */
+      .tarjeta-dato {
+        background: var(--superficie);
+        border-radius: var(--radio-lg);
+        padding: 16px;
+        display: grid;
+        gap: 4px;
+        align-content: start;
+      }
+      .tarjeta-dato .valor {
+        font-size: 32px;
+        line-height: 38px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+      }
+      .tarjeta-dato .valor.texto {
+        font-size: 18px;
+        line-height: 24px;
+        font-weight: 600;
+      }
+      .tarjeta-dato .detalle {
+        font-size: 14px;
+        color: var(--textoSecundario);
+      }
+      .tarjeta-dato .falta {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--borde);
+        font-size: 14px;
+        color: var(--textoSecundario);
+        display: flex;
+        gap: 6px;
+      }
+
+      /* Barras por mes */
+      .barras {
+        background: var(--superficie);
+        border-radius: var(--radio-lg);
+        padding: 16px;
+      }
+      .barras .cabeza {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 16px;
+      }
+      .barras .cabeza strong {
+        font-size: 18px;
+        color: var(--celebracion);
+      }
+      .barras .columnas {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 4px;
+        align-items: end;
+        height: 140px;
+      }
+      .barras .col {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        align-items: end;
+        justify-items: center;
+        height: 100%;
+        gap: 4px;
+      }
+      .barras .num {
+        font-size: 12px;
+        color: var(--textoSecundario);
+        font-variant-numeric: tabular-nums;
+      }
+      .barras .barra {
+        width: 100%;
+        max-width: 18px;
+        border-radius: 4px 4px 2px 2px;
+        background: var(--acento);
+        min-height: 2px;
+      }
+      .barras .barra.cero {
+        background: var(--borde);
+      }
+      .barras .col.top .barra {
+        background: var(--celebracion);
+      }
+      .barras .col.top .num,
+      .barras .col.top .mes {
+        color: var(--celebracion);
+        font-weight: 700;
+      }
+      .barras .mes {
+        font-size: 12px;
+        color: var(--textoSecundario);
+        font-weight: 600;
+      }
+
+      /* Tarjeta de obra destacada */
+      .destacada {
+        background: var(--superficie);
+        border: 1px solid var(--celebracion);
+        border-radius: var(--radio-lg);
+        padding: 16px;
+        display: flex;
+        gap: 16px;
+      }
+      .destacada .info {
+        display: grid;
+        gap: 6px;
+        align-content: start;
+      }
+      .destacada .rotulo {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--celebracion);
+      }
+      .destacada .titulo {
+        font-size: 24px;
+        line-height: 30px;
+        font-weight: 700;
+      }
+      .destacada.vacia {
+        border-style: dashed;
+        border-color: var(--borde);
+        flex-direction: column;
+      }
+
+      /* Estados de pantalla */
+      .estado {
+        background: var(--fondo);
+        border: 1px solid var(--borde);
+        border-radius: var(--radio-lg);
+        padding: 24px;
+        display: grid;
+        justify-items: center;
+        text-align: center;
+        gap: 8px;
+        min-height: 230px;
+        align-content: center;
+      }
+      .estado .icono {
+        font-size: 36px;
+        line-height: 1;
+      }
+      .estado .titulo {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .estado .desc {
+        font-size: 14px;
+        color: var(--textoSecundario);
+        max-width: 260px;
+      }
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 4px solid var(--borde);
+        border-top-color: var(--acento);
+      }
+      .progreso {
+        width: 100%;
+        max-width: 260px;
+        height: 8px;
+        border-radius: var(--pill);
+        background: var(--borde);
+        overflow: hidden;
+      }
+      .progreso span {
+        display: block;
+        height: 100%;
+        background: var(--acento);
+      }
+      .aviso {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        background: var(--superficieAlta);
+        border-left: 4px solid var(--acento);
+        border-radius: var(--radio-sm);
+        padding: 12px;
+        font-size: 14px;
+        text-align: left;
+      }
+
+      /* ---------- Teléfono ---------- */
+      .telefonos {
+        display: flex;
+        gap: 32px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .telefono {
+        width: 390px;
+        height: 844px;
+        border-radius: 44px;
+        border: 10px solid #000;
+        outline: 1px solid var(--borde);
+        background: var(--fondo);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        flex: none;
+      }
+      .telefono .estado-sis {
+        height: 44px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 24px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .telefono .cabecera {
+        padding: 8px 16px 12px;
+        display: grid;
+        gap: 12px;
+      }
+      .telefono .cabecera h4 {
+        margin: 0;
+        font-size: 24px;
+        line-height: 30px;
+      }
+      .telefono .cuerpo {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 16px 24px;
+        display: grid;
+        gap: 12px;
+        align-content: start;
+      }
+      .telefono .cuerpo .doble {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .pestanas {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--borde);
+        background: var(--superficie);
+        padding: 6px 0 22px;
+      }
+      .pestanas div {
+        min-height: 44px;
+        display: grid;
+        justify-items: center;
+        align-content: center;
+        gap: 2px;
+        font-size: 11px;
+        color: var(--textoSecundario);
+      }
+      .pestanas div.activa {
+        color: var(--acento);
+        font-weight: 700;
+      }
+      .pestanas .ico {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        border: 2px solid currentColor;
+      }
+      .selector-anio {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+      }
+
+      /* ---------- Voz y Sí / No ---------- */
+      .mensajes {
+        display: grid;
+        gap: 12px;
+      }
+      .mensaje {
+        background: var(--fondo);
+        border: 1px solid var(--borde);
+        border-radius: var(--radio-md);
+        padding: 12px 16px;
+      }
+      .mensaje .cuando {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--textoSecundario);
+      }
+      .si {
+        color: var(--vista);
+        font-weight: 700;
+      }
+      .no {
+        color: var(--error);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="board">
+        <div class="t-etiqueta">Brand board · Entregable 3, Hito 2</div>
+        <h1>Mi Cartelera Personal</h1>
+        <p>
+          Decisiones visuales para la épica <em>Mi año en cine</em>, a partir de <code>docs/diseno/BRIEF.md</code>:
+          moderna, cinéfila y entusiasta; el resumen debe dar <strong>orgullo y nostalgia</strong>. Se conserva el tema
+          oscuro. Los nombres de los tokens son los mismos que usarán DESIGN.md y <code>src/tema/</code>.
+        </p>
+      </header>
+
+      <!-- ===================================================== MARCA -->
+      <h2>1. Marca</h2>
+      <p class="intro">
+        Wordmark con el nombre completo e isotipo de claqueta en el color de acento. El logo de TMDB aparece siempre
+        más pequeño y en una sección secundaria (Acerca de), nunca junto al wordmark en el mismo tamaño.
+      </p>
+      <div class="rejilla dos">
+        <div class="lamina">
+          <div class="rotulo">Wordmark sobre fondo</div>
+          <div class="wordmark">
+            <div class="isotipo" aria-hidden="true">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="9" width="18" height="12" rx="2" fill="#0F1115" />
+                <path d="M3 9 L5 4 L21 4 L21 9 Z" fill="#0F1115" />
+                <path d="M8 4 L6.5 9 M13 4 L11.5 9 M18 4 L16.5 9" stroke="#9D8CFF" stroke-width="1.6" />
+              </svg>
+            </div>
+            <div class="nombre">Mi <span>Cartelera</span><br />Personal</div>
+          </div>
+          <div class="tmdb">
+            <svg width="96" height="12.5" viewBox="0 0 273.42 35.52" role="img" aria-label="Logo de TMDB">
+              <defs>
+                <linearGradient id="g" x1="0" y1="17.76" x2="273.42" y2="17.76" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#90cea1" />
+                  <stop offset="0.56" stop-color="#3cbec9" />
+                  <stop offset="1" stop-color="#00b3e5" />
+                </linearGradient>
+              </defs>
+              <path
+                fill="url(#g)"
+                d="tmdbGradiente"
+              />
+            </svg>
+            <p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+          </div>
+        </div>
+        <div class="lamina">
+          <div class="rotulo">Reglas de la marca</div>
+          <ul class="t-secundario" style="margin: 0; padding-left: 18px; display: grid; gap: 8px">
+            <li>El wordmark mide al menos 28 px de alto en el texto; el logo de TMDB, como máximo 120 px de ancho.</li>
+            <li>El isotipo usa el acento de fondo y el color de fondo de la app como figura. No se deforma ni se le agregan sombras.</li>
+            <li>"Cartelera" va en el color de acento; el resto del nombre, en <code>texto</code>.</li>
+            <li>El logo de TMDB va con sus colores oficiales (tokens <code>tmdb1</code> a <code>tmdb3</code>) y con el aviso obligatorio en inglés.</li>
+            <li>En la pestaña <em>Mi año en cine</em> no aparece el logo de TMDB: la atribución vive en Acerca de.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===================================================== COLOR -->
+      <h2>2. Color</h2>
+      <p class="intro">
+        La sala a oscuras es el fondo; el violeta "neón de marquesina" es el acento de interacción, y el dorado se reserva
+        para celebrar (estrellas, obra destacada y mes más activo). Los estados se distinguen siempre con color y texto.
+        Contraste medido con la fórmula de WCAG 2.1; mínimo exigido 4,5:1.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Token</th>
+            <th>Valor</th>
+            <th>Uso</th>
+            <th>Contraste</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="muestra" style="background: var(--fondo)"></div></td>
+            <td><code>fondo</code></td>
+            <td><code>#0F1115</code></td>
+            <td>Fondo de todas las pantallas (se conserva)</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--superficie)"></div></td>
+            <td><code>superficie</code></td>
+            <td><code>#1A1D24</code></td>
+            <td>Tarjetas, barra de pestañas (se conserva)</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--superficieAlta)"></div></td>
+            <td><code>superficieAlta</code></td>
+            <td><code>#252932</code></td>
+            <td>Botón secundario, avisos, elementos elevados (se conserva)</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--borde)"></div></td>
+            <td><code>borde</code></td>
+            <td><code>#2F3440</code></td>
+            <td>Bordes, separadores, barra de un mes en 0 (no es texto)</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--texto)"></div></td>
+            <td><code>texto</code></td>
+            <td><code>#F2F3F5</code></td>
+            <td>Texto principal y cifras</td>
+            <td><span class="ok">17,02</span> fondo · 15,19 superficie · 13,12 superficieAlta</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--textoSecundario)"></div></td>
+            <td><code>textoSecundario</code></td>
+            <td><code>#A3A9B5</code></td>
+            <td>Metadatos, etiquetas, descripciones</td>
+            <td><span class="ok">8,01</span> fondo · 7,15 superficie · 6,17 superficieAlta</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--acento)"></div></td>
+            <td><code>acento</code></td>
+            <td><code>#9D8CFF</code></td>
+            <td>Botón primario, pestaña activa, selección, barras por mes, enlaces</td>
+            <td><span class="ok">6,86</span> fondo · 6,13 superficie · 5,29 superficieAlta</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--textoSobreAcento)"></div></td>
+            <td><code>textoSobreAcento</code></td>
+            <td><code>#0F1115</code></td>
+            <td>Texto e iconos sobre el acento</td>
+            <td><span class="ok">6,86</span> sobre acento</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--celebracion)"></div></td>
+            <td><code>celebracion</code></td>
+            <td><code>#F5C542</code></td>
+            <td>Estrellas, obra destacada, mes más activo. Solo para celebrar</td>
+            <td><span class="ok">11,65</span> fondo · 10,40 superficie · 8,98 superficieAlta</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--textoSobreCelebracion)"></div></td>
+            <td><code>textoSobreCelebracion</code></td>
+            <td><code>#1A1206</code></td>
+            <td>Texto sobre el dorado</td>
+            <td><span class="ok">11,43</span> sobre celebracion</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--porVer)"></div></td>
+            <td><code>estadoPorVer</code></td>
+            <td><code>#9DADC4</code></td>
+            <td>Estado <em>Por ver</em> (insignia y chip)</td>
+            <td><span class="ok">7,40</span> superficie · texto <code>fondo</code> encima: 8,29</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--viendo)"></div></td>
+            <td><code>estadoViendo</code></td>
+            <td><code>#4CC9F0</code></td>
+            <td>Estado <em>Viendo</em></td>
+            <td><span class="ok">8,77</span> superficie · texto <code>fondo</code> encima: 9,83</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--vista)"></div></td>
+            <td><code>estadoVista</code></td>
+            <td><code>#45D49B</code></td>
+            <td>Estado <em>Vista</em> y confirmaciones</td>
+            <td><span class="ok">8,95</span> superficie · texto <code>fondo</code> encima: 10,03</td>
+          </tr>
+          <tr>
+            <td><div class="muestra" style="background: var(--error)"></div></td>
+            <td><code>error</code></td>
+            <td><code>#FF6B6B</code></td>
+            <td>Errores, botón de peligro (Quitar, Cerrar sesión)</td>
+            <td><span class="ok">6,81</span> fondo · 6,08 superficie · 5,25 superficieAlta</td>
+          </tr>
+          <tr>
+            <td>
+              <div class="muestra" style="background: linear-gradient(90deg, var(--tmdb1), var(--tmdb2), var(--tmdb3))"></div>
+            </td>
+            <td><code>tmdb1 · tmdb2 · tmdb3</code></td>
+            <td><code>#90CEA1 · #3CBEC9 · #00B3E5</code></td>
+            <td>Solo el degradado oficial del logo de TMDB</td>
+            <td>— (logo)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ===================================================== TIPOGRAFÍA -->
+      <h2>3. Tipografía</h2>
+      <p class="intro">
+        Fuente del sistema (San Francisco en iOS, Roboto en Android); no se cargan fuentes. Las cifras usan números
+        tabulares para que se alineen. Valores en px (puntos de React Native).
+      </p>
+      <div class="lamina">
+        <div class="tipo">
+          <code>display · 40/48 · 800</code><span class="t-display">42 obras</span><span class="nota">Total del año, cabecera del resumen</span>
+        </div>
+        <div class="tipo">
+          <code>dato · 32/38 · 700</code><span class="t-dato">58,5 h</span><span class="nota">Valor de una tarjeta de dato</span>
+        </div>
+        <div class="tipo">
+          <code>titulo · 24/30 · 700</code><span class="t-titulo">Mi año en cine</span><span class="nota">Título de pantalla, obra destacada</span>
+        </div>
+        <div class="tipo">
+          <code>subtitulo · 18/24 · 600</code><span class="t-subtitulo">Mes más activo</span><span class="nota">Título de sección o tarjeta</span>
+        </div>
+        <div class="tipo">
+          <code>cuerpo · 16/22 · 400</code><span class="t-cuerpo">Busca películas y series y agrégalas a tu lista.</span><span class="nota">Texto general, botones (600)</span>
+        </div>
+        <div class="tipo">
+          <code>secundario · 14/20 · 400</code><span class="t-secundario">2026 · Película · 2 h 46 min</span><span class="nota">Metadatos, detalle de tarjetas</span>
+        </div>
+        <div class="tipo">
+          <code>etiqueta · 12/16 · 600</code><span class="t-etiqueta">Obra destacada</span><span class="nota">Rótulos en mayúsculas, meses, insignias</span>
+        </div>
+      </div>
+
+      <!-- ===================================================== ESPACIO Y FORMA -->
+      <h2>4. Espacio y forma</h2>
+      <p class="intro">Escala de 4 en 4 (se conserva la de la app y se agrega <code>xxxl</code>). Radios suaves; todo lo tocable mide al menos 44 px.</p>
+      <div class="rejilla tres">
+        <div class="lamina">
+          <div class="rotulo">Espacios</div>
+          <div class="escala">
+            <div><span style="width: 4px; height: 4px"></span>xs 4</div>
+            <div><span style="width: 8px; height: 8px"></span>sm 8</div>
+            <div><span style="width: 12px; height: 12px"></span>md 12</div>
+            <div><span style="width: 16px; height: 16px"></span>lg 16</div>
+            <div><span style="width: 24px; height: 24px"></span>xl 24</div>
+            <div><span style="width: 32px; height: 32px"></span>xxl 32</div>
+            <div><span style="width: 48px; height: 48px"></span>xxxl 48</div>
+          </div>
+        </div>
+        <div class="lamina">
+          <div class="rotulo">Radios</div>
+          <div class="radios">
+            <div style="border-radius: 6px">sm 6</div>
+            <div style="border-radius: 10px">md 10</div>
+            <div style="border-radius: 16px">lg 16</div>
+            <div style="border-radius: 999px">pill</div>
+          </div>
+        </div>
+        <div class="lamina">
+          <div class="rotulo">Alto mínimo táctil</div>
+          <div class="tocable-demo">
+            <div class="caja">44</div>
+            <span class="t-secundario"><code>ALTURA_TOCABLE_MIN = 44</code>. Botones: 48. Chips, estrellas y pestañas: 44.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================== COMPONENTES -->
+      <h2>5. Componentes</h2>
+      <p class="intro">
+        Los cuatro del Proyecto 3 se conservan con su función y se adaptan a la paleta nueva. Los de la épica se arman solo
+        con los tokens anteriores. La pantalla de ejemplo (sección 6) usa únicamente estos componentes.
+      </p>
+
+      <h3>Del Proyecto 3 (se conservan)</h3>
+      <div class="rejilla dos app">
+        <div class="lamina">
+          <div class="rotulo">Tarjeta de obra · <code>TarjetaObra</code></div>
+          <div style="display: grid; gap: 8px">
+            <div class="tarjeta-obra">
+              <div class="poster" style="width: 64px; height: 96px">póster</div>
+              <div class="info">
+                <div class="titulo">Dune: Parte dos</div>
+                <div class="meta">2024 · Película</div>
+                <div class="fila">
+                  <span class="insignia" style="color: var(--vista)"><span class="punto"></span>Vista</span>
+                  <span class="estrellas chicas"><span class="estrella">★★★★★</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="tarjeta-obra">
+              <div class="poster c" style="width: 64px; height: 96px">póster</div>
+              <div class="info">
+                <div class="titulo">Severance</div>
+                <div class="meta">2022 · Serie</div>
+                <div class="fila"><span class="insignia" style="color: var(--viendo)"><span class="punto"></span>Viendo</span></div>
+              </div>
+            </div>
+            <div class="tarjeta-obra">
+              <div class="poster b" style="width: 64px; height: 96px">sin póster</div>
+              <div class="info">
+                <div class="titulo">Perfect Days</div>
+                <div class="meta">2023 · Película</div>
+                <div class="fila"><span class="insignia" style="color: var(--porVer)"><span class="punto"></span>Por ver</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lamina" style="display: grid; gap: 24px">
+          <div>
+            <div class="rotulo">Selector de estado · <code>SelectorEstado</code> (chips)</div>
+            <div class="chips">
+              <span class="chip"><span class="punto" style="background: var(--porVer)"></span>Por ver</span>
+              <span class="chip"><span class="punto" style="background: var(--viendo)"></span>Viendo</span>
+              <span class="chip sel-vista"><span class="punto" style="background: var(--fondo)"></span>Vista</span>
+            </div>
+            <p class="nota">El seleccionado se rellena con el color de su estado y texto <code>fondo</code>; los demás, punto de color y texto.</p>
+          </div>
+          <div>
+            <div class="rotulo">Estrellas · <code>Estrellas</code></div>
+            <div class="estrellas">
+              <span class="estrella">★</span><span class="estrella">★</span><span class="estrella">★</span><span class="estrella">★</span><span class="estrella vacia">★</span>
+            </div>
+            <p class="nota">Cada estrella es un tocable de 44 × 44. Sin calificar: <code>borde</code>. Deshabilitadas (estado ≠ Vista): opacidad 35 % y el texto de ayuda.</p>
+          </div>
+          <div>
+            <div class="rotulo">Botón · <code>Boton</code></div>
+            <div style="display: grid; gap: 8px">
+              <button class="boton primario">Agregar a mi lista</button>
+              <button class="boton secundario">Reintentar</button>
+              <button class="boton peligro">Quitar de mi lista</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>De la épica Mi año en cine</h3>
+      <div class="rejilla dos app">
+        <div class="lamina">
+          <div class="rotulo">Tarjeta de dato · <code>TarjetaDato</code></div>
+          <div class="rejilla" style="grid-template-columns: 1fr 1fr; gap: 12px">
+            <div class="tarjeta-dato">
+              <span class="t-etiqueta">Horas de cine</span>
+              <span class="valor">58,5 h</span>
+              <span class="detalle">en 31 películas</span>
+              <span class="falta">ⓘ 2 películas sin duración no suman horas.</span>
+            </div>
+            <div class="tarjeta-dato">
+              <span class="t-etiqueta">Director más visto</span>
+              <span class="valor texto">Aún no hay datos suficientes</span>
+              <span class="detalle">Ninguna película del año tiene director.</span>
+            </div>
+          </div>
+          <p class="nota">Rótulo (<code>etiqueta</code>), valor (<code>dato</code>, o <code>subtitulo</code> si es un nombre), detalle (<code>secundario</code>) y, si falta algo, una línea de aviso separada por un borde.</p>
+        </div>
+        <div class="lamina">
+          <div class="rotulo">Selector de año · <code>SelectorAnio</code></div>
+          <div class="selector-anio">
+            <span class="chip sel-acento">2026</span><span class="chip">2025</span><span class="chip">2023</span>
+          </div>
+          <p class="nota">Chips horizontales con desplazamiento, del año más reciente al más antiguo (D4). El seleccionado usa <code>acento</code>. Cada chip mide 44 px de alto y se anuncia como "Año 2025".</p>
+        </div>
+        <div class="lamina">
+          <div class="rotulo">Barras por mes · <code>BarrasPorMes</code></div>
+          <div class="barras">
+            <div class="cabeza"><span class="t-subtitulo">Mes más activo</span><strong>Julio · 8 obras</strong></div>
+            <div class="columnas" role="img" aria-label="Obras vistas por mes">
+              <div class="col"><span class="num">2</span><span class="barra" style="height: 25%"></span><span class="mes">E</span></div>
+              <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">F</span></div>
+              <div class="col"><span class="num">5</span><span class="barra" style="height: 62%"></span><span class="mes">M</span></div>
+              <div class="col"><span class="num">1</span><span class="barra" style="height: 12%"></span><span class="mes">A</span></div>
+              <div class="col"><span class="num">4</span><span class="barra" style="height: 50%"></span><span class="mes">M</span></div>
+              <div class="col"><span class="num">6</span><span class="barra" style="height: 75%"></span><span class="mes">J</span></div>
+              <div class="col top"><span class="num">8</span><span class="barra" style="height: 100%"></span><span class="mes">J</span></div>
+              <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">A</span></div>
+              <div class="col"><span class="num">0</span><span class="barra cero"></span><span class="mes">S</span></div>
+              <div class="col"><span class="num">4</span><span class="barra" style="height: 50%"></span><span class="mes">O</span></div>
+              <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">N</span></div>
+              <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">D</span></div>
+            </div>
+          </div>
+          <p class="nota">Construidas con <code>View</code>: alto proporcional al mes con más obras. Los 12 meses siempre visibles; un mes en 0 deja una barra de 2 px en <code>borde</code> y su "0" (D10). El mes más activo va en <code>celebracion</code>. Cada columna se anuncia como "julio: 8 obras".</p>
+        </div>
+        <div class="lamina" style="display: grid; gap: 12px">
+          <div class="rotulo">Tarjeta de obra destacada · <code>TarjetaDestacada</code></div>
+          <div class="destacada">
+            <div class="poster" style="width: 96px; height: 144px">póster</div>
+            <div class="info">
+              <span class="rotulo">Obra destacada</span>
+              <span class="titulo">Dune: Parte dos</span>
+              <span class="estrellas chicas"><span class="estrella" style="font-size: 18px">★★★★★</span></span>
+              <span class="t-secundario">Película · vista el 12 de marzo</span>
+            </div>
+          </div>
+          <div class="destacada vacia">
+            <span class="rotulo" style="color: var(--textoSecundario)">Obra destacada</span>
+            <span class="t-cuerpo">Califica las obras que viste para elegir tu destacada del año.</span>
+            <button class="boton secundario">Ir a Mi lista</button>
+          </div>
+        </div>
+      </div>
+
+      <h3>Estados de pantalla · <code>EstadosPantalla</code></h3>
+      <div class="rejilla tres app">
+        <div class="estado">
+          <div class="spinner"></div>
+          <div class="titulo">Preparando tu año…</div>
+          <div class="desc">Estamos ordenando tus obras vistas.</div>
+        </div>
+        <div class="estado">
+          <div class="titulo">Completando datos</div>
+          <div class="progreso"><span style="width: 40%"></span></div>
+          <div class="desc">2 de 5 obras · Traemos géneros, duración y directores desde TMDB.</div>
+        </div>
+        <div class="estado">
+          <div class="icono" style="color: var(--textoSecundario)">◎</div>
+          <div class="titulo">Aún no hay obras vistas en 2024</div>
+          <div class="desc">Cuando marques una obra como vista, aparecerá en tu resumen.</div>
+          <button class="boton primario" style="max-width: 240px">Ir a Mi lista</button>
+        </div>
+        <div class="estado">
+          <div class="icono" style="color: var(--error)">!</div>
+          <div class="titulo">No pudimos preparar tu resumen</div>
+          <div class="desc">Revisa tu conexión e inténtalo de nuevo.</div>
+          <button class="boton secundario" style="max-width: 240px">Reintentar</button>
+        </div>
+        <div class="estado" style="align-content: start">
+          <div class="aviso">
+            <span style="color: var(--acento)">⦸</span>
+            <span>Sin conexión: estás viendo tu última copia guardada. 2 obras vistas aún no tienen fecha y se sumarán al reconectar.</span>
+          </div>
+          <div class="desc" style="margin-top: 8px">Aviso sin conexión (D13, PA-1): va arriba del resumen, no lo reemplaza.</div>
+        </div>
+        <div class="estado" style="align-content: start">
+          <div class="aviso" style="border-left-color: var(--celebracion)">
+            <span style="color: var(--celebracion)">ⓘ</span>
+            <span>1 obra quedó sin datos de TMDB: cuenta en el total, pero no en horas, géneros ni directores.</span>
+          </div>
+          <div class="desc" style="margin-top: 8px">Aviso de datos faltantes (D6): debajo de la cabecera, solo si hay obras sin datos.</div>
+        </div>
+      </div>
+
+      <!-- ===================================================== PANTALLA DE EJEMPLO -->
+      <h2>6. Pantalla de ejemplo</h2>
+      <p class="intro">
+        <em>Mi año en cine</em> a 390 × 844 (iPhone 14), armada solo con los componentes de la sección 5. Orden por el
+        brief: primero el orgullo (total y obra destacada), después la nostalgia (mes más activo) y al final los datos.
+      </p>
+      <div class="telefonos app">
+        <div class="telefono">
+          <div class="estado-sis"><span>21:41</span><span>●●● ▮</span></div>
+          <div class="cabecera">
+            <h4>Mi año en cine</h4>
+            <div class="selector-anio">
+              <span class="chip sel-acento">2026</span><span class="chip">2025</span><span class="chip">2023</span>
+            </div>
+          </div>
+          <div class="cuerpo">
+            <div>
+              <div class="t-display">42 obras</div>
+              <div class="t-secundario">31 películas · 11 series</div>
+            </div>
+            <div class="destacada">
+              <div class="poster" style="width: 84px; height: 126px">póster</div>
+              <div class="info">
+                <span class="rotulo">Obra destacada</span>
+                <span class="titulo" style="font-size: 20px; line-height: 26px">Dune: Parte dos</span>
+                <span class="estrellas chicas"><span class="estrella" style="font-size: 16px">★★★★★</span></span>
+                <span class="t-secundario">Película · vista el 12 de marzo</span>
+              </div>
+            </div>
+            <div class="barras">
+              <div class="cabeza"><span class="t-subtitulo">Mes más activo</span><strong>Julio · 8</strong></div>
+              <div class="columnas" style="height: 120px">
+                <div class="col"><span class="num">2</span><span class="barra" style="height: 25%"></span><span class="mes">E</span></div>
+                <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">F</span></div>
+                <div class="col"><span class="num">5</span><span class="barra" style="height: 62%"></span><span class="mes">M</span></div>
+                <div class="col"><span class="num">1</span><span class="barra" style="height: 12%"></span><span class="mes">A</span></div>
+                <div class="col"><span class="num">4</span><span class="barra" style="height: 50%"></span><span class="mes">M</span></div>
+                <div class="col"><span class="num">6</span><span class="barra" style="height: 75%"></span><span class="mes">J</span></div>
+                <div class="col top"><span class="num">8</span><span class="barra" style="height: 100%"></span><span class="mes">J</span></div>
+                <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">A</span></div>
+                <div class="col"><span class="num">0</span><span class="barra cero"></span><span class="mes">S</span></div>
+                <div class="col"><span class="num">4</span><span class="barra" style="height: 50%"></span><span class="mes">O</span></div>
+                <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">N</span></div>
+                <div class="col"><span class="num">3</span><span class="barra" style="height: 37%"></span><span class="mes">D</span></div>
+              </div>
+            </div>
+            <div class="doble">
+              <div class="tarjeta-dato">
+                <span class="t-etiqueta">Horas de cine</span>
+                <span class="valor">58,5 h</span>
+                <span class="detalle">en 31 películas</span>
+              </div>
+              <div class="tarjeta-dato">
+                <span class="t-etiqueta">Obras</span>
+                <span class="valor">42</span>
+                <span class="detalle">31 películas · 11 series</span>
+              </div>
+              <div class="tarjeta-dato">
+                <span class="t-etiqueta">Género</span>
+                <span class="valor texto">Drama</span>
+                <span class="detalle">14 obras</span>
+              </div>
+              <div class="tarjeta-dato">
+                <span class="t-etiqueta">Director</span>
+                <span class="valor texto">Denis Villeneuve</span>
+                <span class="detalle">3 películas</span>
+              </div>
+            </div>
+            <div class="aviso" style="border-left-color: var(--celebracion)">
+              <span style="color: var(--celebracion)">ⓘ</span>
+              <span>1 obra quedó sin datos de TMDB: cuenta en el total, pero no en horas, géneros ni directores.</span>
+            </div>
+          </div>
+          <div class="pestanas">
+            <div><span class="ico"></span>Buscar</div>
+            <div><span class="ico"></span>Mi lista</div>
+            <div class="activa"><span class="ico"></span>Mi año</div>
+            <div><span class="ico"></span>Acerca de</div>
+          </div>
+        </div>
+
+        <div class="telefono">
+          <div class="estado-sis"><span>21:42</span><span>●●● ▮</span></div>
+          <div class="cabecera">
+            <h4>Mi año en cine</h4>
+            <div class="selector-anio">
+              <span class="chip">2026</span><span class="chip">2025</span><span class="chip sel-acento">2024</span>
+            </div>
+          </div>
+          <div class="cuerpo" style="align-content: center">
+            <div class="estado" style="border: none">
+              <div class="icono" style="color: var(--textoSecundario)">◎</div>
+              <div class="titulo">Aún no hay obras vistas en 2024</div>
+              <div class="desc">Cuando marques una obra como vista, aparecerá en tu resumen.</div>
+              <button class="boton primario" style="max-width: 240px">Ir a Mi lista</button>
+            </div>
+          </div>
+          <div class="pestanas">
+            <div><span class="ico"></span>Buscar</div>
+            <div><span class="ico"></span>Mi lista</div>
+            <div class="activa"><span class="ico"></span>Mi año</div>
+            <div><span class="ico"></span>Acerca de</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================== VOZ -->
+      <h2>7. Voz</h2>
+      <p class="intro">
+        Cercana y entusiasta, en español neutro y tuteando. Celebra lo que hay antes de explicar lo que falta. Explica qué
+        pasó y qué puede hacer el usuario; nunca lo culpa ni usa jerga técnica.
+      </p>
+      <div class="rejilla dos">
+        <div class="mensajes">
+          <div class="mensaje">
+            <div class="cuando">Resumen vacío (D12)</div>
+            Aún no hay obras vistas en 2024. Cuando marques una obra como vista, aparecerá en tu resumen. <strong>[Ir a Mi lista]</strong>
+          </div>
+          <div class="mensaje">
+            <div class="cuando">Error</div>
+            No pudimos preparar tu resumen. Revisa tu conexión e inténtalo de nuevo. <strong>[Reintentar]</strong>
+          </div>
+          <div class="mensaje">
+            <div class="cuando">Sin conexión (D13, PA-1)</div>
+            Sin conexión: estás viendo tu última copia guardada. 2 obras vistas aún no tienen fecha y se sumarán al reconectar.
+          </div>
+          <div class="mensaje">
+            <div class="cuando">Obras sin datos (D6)</div>
+            1 obra quedó sin datos de TMDB: cuenta en el total, pero no en horas, géneros ni directores.
+          </div>
+        </div>
+        <div class="mensajes">
+          <div class="mensaje">
+            <div class="cuando">Películas sin duración (D7)</div>
+            2 películas sin duración no suman horas.
+          </div>
+          <div class="mensaje">
+            <div class="cuando">Sin director (D9)</div>
+            Aún no hay datos suficientes para elegir un director.
+          </div>
+          <div class="mensaje">
+            <div class="cuando">Sin calificaciones (D11)</div>
+            Califica las obras que viste para elegir tu destacada del año. <strong>[Ir a Mi lista]</strong>
+          </div>
+          <div class="mensaje">
+            <div class="cuando">Sí / No</div>
+            <span class="si">Sí:</span> "Aún no hay obras vistas en 2024".<br />
+            <span class="no">No:</span> "Error: no data for year 2024" · "No has visto nada" · "¡¡Increíble!! 🎉"
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

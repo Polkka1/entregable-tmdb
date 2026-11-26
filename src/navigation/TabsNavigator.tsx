@@ -3,7 +3,7 @@ import { Icono, type NombreIcono } from '../components/Icono';
 import { AcercaDeScreen } from '../screens/AcercaDeScreen';
 import { BuscarScreen } from '../screens/BuscarScreen';
 import { MiListaScreen } from '../screens/MiListaScreen';
-import { colores } from '../theme/tema';
+import { colores } from '../tema/tema';
 import type { TabsParamList } from '../types/navegacion';
 
 const Tabs = createBottomTabNavigator<TabsParamList>();

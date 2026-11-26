@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { construirUrlImagen } from '../services/tmdbService';
-import { colores, radio } from '../theme/tema';
+import { colores, radio } from '../tema/tema';
 import type { UsoImagen } from '../types/tmdb';
 import { Icono, type NombreIcono } from './Icono';
 

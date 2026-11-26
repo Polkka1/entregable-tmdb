@@ -7,7 +7,7 @@ import { useSesion } from '../context/SesionContext';
 import { DetalleScreen } from '../screens/DetalleScreen';
 import { EditarEntradaScreen } from '../screens/EditarEntradaScreen';
 import { LoginScreen } from '../screens/LoginScreen';
-import { colores } from '../theme/tema';
+import { colores } from '../tema/tema';
 import type { RootStackParamList } from '../types/navegacion';
 import { TabsNavigator } from './TabsNavigator';
 

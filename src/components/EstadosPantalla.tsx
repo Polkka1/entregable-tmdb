@@ -1,7 +1,7 @@
 // Vistas reutilizables para los estados de una petición: cargando, error y vacío.
 
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio } from '../theme/tema';
+import { colores, espacio } from '../tema/tema';
 import { Boton } from './Boton';
 import { Icono, type NombreIcono } from './Icono';
 

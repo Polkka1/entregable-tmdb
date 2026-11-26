@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../theme/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../tema/tema';
 import { Icono, type NombreIcono } from './Icono';
 
 type Variante = 'primario' | 'secundario' | 'peligro';

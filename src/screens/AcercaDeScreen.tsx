@@ -5,7 +5,7 @@ import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { TmdbLogo } from '../components/TmdbLogo';
 import { useSesion } from '../context/SesionContext';
-import { colores, espacio, radio } from '../theme/tema';
+import { colores, espacio, radio } from '../tema/tema';
 import { mensajeDeError } from '../utils/errores';
 
 const AVISO_TMDB = 'This product uses the TMDB API but is not endorsed or certified by TMDB.';

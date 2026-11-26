@@ -5,7 +5,7 @@ import { Chip } from '../components/Chip';
 import { Cargando, MensajeVacio } from '../components/EstadosPantalla';
 import { TarjetaLista } from '../components/TarjetaLista';
 import { useCartelera } from '../context/CarteleraContext';
-import { colores, espacio } from '../theme/tema';
+import { colores, espacio } from '../tema/tema';
 import {
   ESTADOS,
   ETIQUETA_ESTADO,

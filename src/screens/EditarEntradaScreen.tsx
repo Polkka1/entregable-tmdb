@@ -6,7 +6,7 @@ import { MensajeVacio } from '../components/EstadosPantalla';
 import { Estrellas } from '../components/Estrellas';
 import { Poster } from '../components/Poster';
 import { useCartelera } from '../context/CarteleraContext';
-import { colores, espacio, radio } from '../theme/tema';
+import { colores, espacio, radio } from '../tema/tema';
 import { ESTADOS, ETIQUETA_ESTADO, ETIQUETA_TIPO, MAX_COMENTARIO, type EstadoVisto, type ItemLista } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import { mensajeDeError } from '../utils/errores';

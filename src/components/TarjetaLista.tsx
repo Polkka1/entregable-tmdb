@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio } from '../theme/tema';
+import { colores, espacio, radio } from '../tema/tema';
 import { ETIQUETA_ESTADO, ETIQUETA_TIPO, type EstadoVisto, type ItemLista } from '../types/lista';
 import { Estrellas } from './Estrellas';
 import { Icono } from './Icono';

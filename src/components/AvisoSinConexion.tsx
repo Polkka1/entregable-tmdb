@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colores, espacio } from '../theme/tema';
+import { colores, espacio } from '../tema/tema';
 import { Icono } from './Icono';
 
 /** Aviso de RF8: la lista que se ve es la última copia guardada en el dispositivo. */

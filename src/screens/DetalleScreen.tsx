@@ -7,7 +7,7 @@ import { Poster } from '../components/Poster';
 import { useCartelera } from '../context/CarteleraContext';
 import { usePeticion } from '../hooks/usePeticion';
 import { obtenerDetalle } from '../services/tmdbService';
-import { colores, espacio } from '../theme/tema';
+import { colores, espacio } from '../tema/tema';
 import { ETIQUETA_TIPO } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import type { DetalleObra, MiembroElenco } from '../types/tmdb';

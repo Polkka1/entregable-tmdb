@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio } from '../theme/tema';
+import { colores, espacio, radio } from '../tema/tema';
 import { ETIQUETA_TIPO } from '../types/lista';
 import type { ResultadoBusqueda } from '../types/tmdb';
 import { Icono } from './Icono';

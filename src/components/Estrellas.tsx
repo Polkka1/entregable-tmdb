@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ALTURA_TOCABLE_MIN, colores } from '../theme/tema';
+import { ALTURA_TOCABLE_MIN, colores } from '../tema/tema';
 import { CALIFICACION_MAX, CALIFICACION_MIN } from '../types/lista';
 import { Icono } from './Icono';
 

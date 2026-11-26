@@ -6,7 +6,7 @@ import { Icono } from '../components/Icono';
 import { TarjetaResultado } from '../components/TarjetaResultado';
 import { useCartelera } from '../context/CarteleraContext';
 import { useBusqueda, type EstadoBusqueda } from '../hooks/useBusqueda';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../theme/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../tema/tema';
 import type { TabsScreenProps } from '../types/navegacion';
 import type { ResultadoBusqueda } from '../types/tmdb';
 import { assertNever } from '../utils/assertNever';

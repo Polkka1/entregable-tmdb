@@ -133,7 +133,7 @@ src/
 │   ├── cacheService.ts     Copia de la lista en AsyncStorage
 │   ├── http.ts             fetch genérico con tiempo máximo, cancelación y errores en español
 │   └── tmdbService.ts      buscar, obtenerDetalle, construirUrlImagen
-├── theme/tema.ts           Colores, espacios y alto mínimo tocable (44 px)
+├── tema/tema.ts            Colores, espacios y alto mínimo tocable (44 px)
 ├── types/                  Tipos de dominio, de la API de TMDB, de navegación y EstadoPeticion<T>
 └── utils/                  Funciones puras (formato, itemId, regla de calificación, assertNever)
 firestore.rules             Reglas de seguridad publicadas en Firestore

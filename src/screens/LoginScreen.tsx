@@ -13,7 +13,7 @@ import {
 import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { useSesion } from '../context/SesionContext';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../theme/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, radio } from '../tema/tema';
 import { mensajeDeError } from '../utils/errores';
 
 type Modo = 'iniciar' | 'registro';

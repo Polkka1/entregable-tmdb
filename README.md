@@ -249,6 +249,25 @@ el formato `tipo_tmdbId`.
 
 ![Lectura denegada a cuenta2](docs/reglas-cuenta2-denegada.png)
 
+### Entregable 3
+
+**Mi año en cine:** el resumen de 2025 con datos de prueba y un año sin obras vistas.
+
+<img src="docs/resumen-con-datos.jpeg" alt="Resumen de 2025 con datos" width="260" /> <img src="docs/resumen-vacio.jpeg" alt="Año sin obras vistas" width="260" />
+
+**Firestore:** un documento de `mi_lista` con los campos nuevos (`vistaEn`, `generos`, `duracionMin`
+y `directores`).
+
+![Documento con los campos nuevos](docs/firestore-campos-nuevos.png)
+
+**Tests:** `npm test` en verde.
+
+![npm test en verde](docs/npm-test-verde.png)
+
+**Rules Playground:** una escritura con `duracionMin: -5` se deniega en `camposNuevosValidos`.
+
+![duracionMin negativa denegada](docs/reglas-duracion-negativa.png)
+
 ## Créditos y términos de uso
 
 <img src="https://www.themoviedb.org/assets/v4/logos/v2/blue_short-8e7b30f73a4020692ccca9c88bafe5dcb6f8a62a4c6bc55cd9ba82bb2cd95f6c.svg" alt="TMDB" width="120" />

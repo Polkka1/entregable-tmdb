@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { construirUrlImagen } from '../services/tmdbService';
-import { colores, radio } from '../tema/tema';
+import { colores } from '../tema/tema';
 import type { UsoImagen } from '../types/tmdb';
 import { Icono, type NombreIcono } from './Icono';
 
@@ -46,11 +46,9 @@ export function Poster({ path, uso, ancho, alto = Math.round(ancho * 1.5), descr
 
 const styles = StyleSheet.create({
   imagen: {
-    borderRadius: radio.sm,
     backgroundColor: colores.superficieAlta,
   },
   relleno: {
-    borderRadius: radio.sm,
     backgroundColor: colores.superficieAlta,
     alignItems: 'center',
     justifyContent: 'center',

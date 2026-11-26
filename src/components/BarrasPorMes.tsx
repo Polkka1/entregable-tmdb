@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { etiquetaBarra, nombreMes, textoMesTop } from '../utils/textosResumen';
 
 const ALTO_BARRAS = 120;
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   tarjeta: {
     gap: espacio.lg,
     padding: espacio.lg,
-    borderRadius: radio.lg,
     backgroundColor: colores.superficie,
   },
   cabeza: {
@@ -81,8 +80,6 @@ const styles = StyleSheet.create({
   barra: {
     width: '100%',
     maxWidth: 18,
-    borderTopLeftRadius: radio.sm,
-    borderTopRightRadius: radio.sm,
     backgroundColor: colores.acento,
   },
   barraVacia: {

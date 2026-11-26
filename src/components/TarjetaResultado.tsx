@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { ETIQUETA_TIPO } from '../types/lista';
 import type { ResultadoBusqueda } from '../types/tmdb';
 import { Icono } from './Icono';
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: espacio.md,
     padding: espacio.sm,
-    borderRadius: radio.md,
     backgroundColor: colores.superficie,
   },
   presionada: {

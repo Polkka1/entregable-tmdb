@@ -56,12 +56,7 @@ export const espacio = {
   xxxl: 48,
 } as const;
 
-export const radio = {
-  sm: 6,
-  md: 10,
-  lg: 16,
-  pill: 999,
-} as const;
+// DESIGN.md §2.4: esquinas rectas en todo; no hay token de radio.
 
 /** Alto mínimo de cualquier elemento tocable. El botón usa ALTURA_TOCABLE_MIN + 4. */
 export const ALTURA_TOCABLE_MIN = 44;

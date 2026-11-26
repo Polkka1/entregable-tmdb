@@ -6,7 +6,7 @@ import { Icono } from '../components/Icono';
 import { TarjetaResultado } from '../components/TarjetaResultado';
 import { useCartelera } from '../context/CarteleraContext';
 import { useBusqueda, type EstadoBusqueda } from '../hooks/useBusqueda';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, tipografia } from '../tema/tema';
 import type { TabsScreenProps } from '../types/navegacion';
 import type { ResultadoBusqueda } from '../types/tmdb';
 import { assertNever } from '../utils/assertNever';
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     gap: espacio.sm,
     margin: espacio.lg,
     paddingLeft: espacio.md,
-    borderRadius: radio.md,
     borderWidth: 1,
     borderColor: colores.borde,
     backgroundColor: colores.superficie,

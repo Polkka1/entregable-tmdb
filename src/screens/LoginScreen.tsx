@@ -13,7 +13,7 @@ import {
 import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { useSesion } from '../context/SesionContext';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, tipografia } from '../tema/tema';
 import { mensajeDeError } from '../utils/errores';
 
 type Modo = 'iniciar' | 'registro';
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
   input: {
     minHeight: ALTURA_TOCABLE_MIN + 4,
     paddingHorizontal: espacio.md,
-    borderRadius: radio.md,
     borderWidth: 1,
     borderColor: colores.borde,
     backgroundColor: colores.superficie,
@@ -222,7 +221,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: espacio.sm,
     padding: espacio.md,
-    borderRadius: radio.md,
     backgroundColor: colores.superficie,
     borderWidth: 1,
     borderColor: colores.error,

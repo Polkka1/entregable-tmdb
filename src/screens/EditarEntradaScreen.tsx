@@ -7,7 +7,7 @@ import { Estrellas } from '../components/Estrellas';
 import { Poster } from '../components/Poster';
 import { SelectorEstado } from '../components/SelectorEstado';
 import { useCartelera } from '../context/CarteleraContext';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { ETIQUETA_ESTADO, ETIQUETA_TIPO, MAX_COMENTARIO, type EstadoVisto, type ItemLista } from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import { mensajeDeError } from '../utils/errores';
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
   comentario: {
     minHeight: 120,
     padding: espacio.md,
-    borderRadius: radio.md,
     borderWidth: 1,
     borderColor: colores.borde,
     backgroundColor: colores.superficie,

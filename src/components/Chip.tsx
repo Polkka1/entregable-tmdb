@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, tipografia } from '../tema/tema';
 
 interface Props {
   etiqueta: string;
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
   chip: {
     minHeight: ALTURA_TOCABLE_MIN,
     paddingHorizontal: espacio.lg,
-    borderRadius: radio.pill,
     borderWidth: 1,
     borderColor: colores.borde,
     backgroundColor: colores.superficie,
@@ -52,7 +51,6 @@ const styles = StyleSheet.create({
   punto: {
     width: 8,
     height: 8,
-    borderRadius: radio.pill,
   },
   presionado: {
     opacity: 0.8,

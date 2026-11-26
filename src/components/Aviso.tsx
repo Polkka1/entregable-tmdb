@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { Icono, type NombreIcono } from './Icono';
 
 export type TipoAviso = 'sinConexion' | 'datosFaltantes';
@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     gap: espacio.sm,
     padding: espacio.md,
     borderLeftWidth: 4,
-    borderRadius: radio.sm,
     backgroundColor: colores.superficieAlta,
   },
   texto: {

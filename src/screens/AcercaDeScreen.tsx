@@ -5,7 +5,7 @@ import { Boton } from '../components/Boton';
 import { Icono } from '../components/Icono';
 import { TmdbLogo } from '../components/TmdbLogo';
 import { useSesion } from '../context/SesionContext';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { mensajeDeError } from '../utils/errores';
 
 const AVISO_TMDB = 'This product uses the TMDB API but is not endorsed or certified by TMDB.';
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
   isotipo: {
     width: 64,
     height: 64,
-    borderRadius: radio.lg,
     backgroundColor: colores.acento,
     alignItems: 'center',
     justifyContent: 'center',
@@ -142,7 +141,6 @@ const styles = StyleSheet.create({
   tarjeta: {
     gap: espacio.md,
     padding: espacio.lg,
-    borderRadius: radio.lg,
     backgroundColor: colores.superficie,
   },
   subtitulo: {

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { Icono } from './Icono';
 
 interface Props {
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: espacio.xs,
     padding: espacio.lg,
-    borderRadius: radio.lg,
     backgroundColor: colores.superficie,
   },
   rotulo: {

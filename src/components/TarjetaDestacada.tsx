@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import type { ItemLista } from '../types/lista';
 import { detalleDestacada } from '../utils/textosResumen';
 import { Boton } from './Boton';
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: espacio.lg,
     padding: espacio.lg,
-    borderRadius: radio.lg,
     borderWidth: 1,
     borderColor: colores.celebracion,
     backgroundColor: colores.superficie,

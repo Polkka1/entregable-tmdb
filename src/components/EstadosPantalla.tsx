@@ -1,7 +1,7 @@
 // Vistas reutilizables para los estados de una petición: cargando, error y vacío.
 
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia } from '../tema/tema';
+import { colores, espacio, tipografia } from '../tema/tema';
 import { textoProgreso } from '../utils/textosResumen';
 import { Boton } from './Boton';
 import { Icono, type NombreIcono } from './Icono';
@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
   progreso: {
     gap: espacio.sm,
     padding: espacio.md,
-    borderRadius: radio.md,
     backgroundColor: colores.superficie,
   },
   progresoCabeza: {
@@ -127,13 +126,11 @@ const styles = StyleSheet.create({
   },
   pista: {
     height: espacio.sm,
-    borderRadius: radio.pill,
     backgroundColor: colores.borde,
     overflow: 'hidden',
   },
   relleno: {
     height: '100%',
-    borderRadius: radio.pill,
     backgroundColor: colores.acento,
   },
 });

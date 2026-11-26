@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
-import { ALTURA_TOCABLE_MIN, colores, espacio, radio, tipografia } from '../tema/tema';
+import { ALTURA_TOCABLE_MIN, colores, espacio, tipografia } from '../tema/tema';
 import { Icono, type NombreIcono } from './Icono';
 
 type Variante = 'primario' | 'secundario' | 'peligro';
@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   base: {
     minHeight: ALTURA_TOCABLE_MIN + 4,
     paddingHorizontal: espacio.lg,
-    borderRadius: radio.md,
     alignItems: 'center',
     justifyContent: 'center',
   },

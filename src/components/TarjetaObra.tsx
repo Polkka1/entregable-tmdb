@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { colores, espacio, radio, tipografia, colorEstado } from '../tema/tema';
+import { colores, espacio, tipografia, colorEstado } from '../tema/tema';
 import { ETIQUETA_ESTADO, ETIQUETA_TIPO, type ItemLista } from '../types/lista';
 import { Estrellas } from './Estrellas';
 import { Icono } from './Icono';
@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: espacio.md,
     padding: espacio.sm,
-    borderRadius: radio.md,
     backgroundColor: colores.superficie,
   },
   presionada: {
@@ -82,14 +81,12 @@ const styles = StyleSheet.create({
   punto: {
     width: 6,
     height: 6,
-    borderRadius: radio.pill,
   },
   insignia: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: espacio.xs,
     borderWidth: 1,
-    borderRadius: radio.pill,
     paddingHorizontal: espacio.sm,
     paddingVertical: 2,
   },

@@ -105,7 +105,8 @@ Antes de dar una tarea por terminada y antes de cada commit de código: `npm tes
 
 ## Commits
 
-Se hacen con la skill `/commit`. Van en español, con prefijo y en minúsculas después de él:
+Se hacen con la skill del proyecto `/commit-es` (`.claude/skills/commit-es/SKILL.md`), que aplica
+esta convención. Van en español, con prefijo y en minúsculas después de él:
 
 | Prefijo | Uso |
 |---|---|

@@ -35,6 +35,7 @@ src/
   utils/                Funciones puras de apoyo (formato, itemId, errores)
   config/env.ts         Lectura de las variables EXPO_PUBLIC_*
 firestore.rules         Reglas de seguridad (copia de las publicadas)
+DESIGN.md               Sistema de diseño: principios, tokens, componentes, pantallas y voz
 docs/
   prd/                  PRD: RF1 a RF10 y reglas de negocio D1 a D13
   backlog/              Épica, historias, criterios DADO/CUANDO/ENTONCES y tickets
@@ -78,6 +79,10 @@ Antes de dar una tarea por terminada y antes de cada commit de código: `npm tes
 - Los `switch` sobre uniones usan `assertNever`; los mapas por estado o tipo usan `Record<...>`.
 
 **Interfaz**
+- **Antes de crear o modificar cualquier archivo de `src/screens/`, `src/components/`,
+  `src/navigation/` o `src/tema/`, lee `DESIGN.md` y usa sus tokens y componentes.** Si algo no
+  está en DESIGN.md, no lo inventes: usa lo más cercano y avisa. El agente no modifica DESIGN.md
+  por su cuenta; solo propone cambios.
 - Colores, espacios, radios y tamaños salen de `src/tema/`. Ningún archivo fuera de `src/tema/`
   escribe un color hexadecimal.
 - Todo elemento tocable mide al menos 44 px (`ALTURA_TOCABLE_MIN`).

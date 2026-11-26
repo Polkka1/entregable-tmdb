@@ -1,49 +1,123 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
+# Mi Cartelera Personal
 
-## Expo has changed — do not trust your training data
+## Qué es la app
 
-Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:
+App móvil para buscar películas y series en TMDB y llevar una lista personal y privada. Cada obra
+tiene un estado (*Por ver*, *Viendo* o *Vista*), una calificación de 1 a 5 (solo si está vista) y
+un comentario. La lista se guarda en Firestore, con una copia en AsyncStorage para verla sin
+conexión.
 
-1. Read the major version of the `expo` package in `package.json`.
-2. Fetch the matching versioned docs: `https://docs.expo.dev/versions/v<major>.0.0/`
-3. For anything else, fetch https://docs.expo.dev/llms.txt — an index of all Expo docs with corrections to common LLM misconceptions. Follow its links to the specific page you need; never answer from memory.
+La épica en curso es *Mi año en cine*: una pestaña con el resumen de lo que el usuario vio en un
+año. Los requisitos están en `docs/prd/PRD.md` y el estado del código en `docs/AUDITORIA.md`.
 
-## Commands
+## Stack
 
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
+- Expo SDK 58, React Native y TypeScript estricto. Se prueba en Expo Go.
+- React Navigation (pila nativa y pestañas inferiores). **No se usa Expo Router.**
+- Firebase JS SDK: Auth y Firestore. TMDB API v3.
+- Context API para el estado global y AsyncStorage para la copia local.
+- Vitest para los tests y Prettier para el formato.
 
-```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
+## Capas y carpetas
+
+```
+App.tsx                 Proveedores y navegación raíz
+src/
+  screens/              Una pantalla por archivo. Solo interfaz: leen el contexto y llaman a hooks o servicios
+  components/           Componentes reutilizables
+  navigation/           RootNavigator (pila, Login condicional) y TabsNavigator (pestañas)
+  context/              SesionContext (usuario) y CarteleraContext (lista y acciones)
+  hooks/                usePeticion<T>, useBusqueda, useDebounce
+  services/             Único lugar que habla con Firebase, TMDB y AsyncStorage
+  dominio/              Funciones puras de reglas de negocio y sus tests (*.test.ts)
+  tema/                 Tokens de diseño: colores, espacios, radios y tamaños. Única fuente de verdad
+  types/                Tipos del dominio, de TMDB, de navegación y EstadoPeticion<T>
+  utils/                Funciones puras de apoyo (formato, itemId, errores)
+  config/env.ts         Lectura de las variables EXPO_PUBLIC_*
+firestore.rules         Reglas de seguridad (copia de las publicadas)
+docs/
+  prd/                  PRD: RF1 a RF10 y reglas de negocio D1 a D13
+  backlog/              Épica, historias, criterios DADO/CUANDO/ENTONCES y tickets
+  specs/                Specs técnicas, una por cambio
+  diseno/               BRIEF.md y brand-board.html
+  AUDITORIA.md          Auditoría inicial y final
+  VERIFICACION.md       Verificación humana en el teléfono
+  IA.md                 Momentos clave del uso de IA
 ```
 
-Run lint and typecheck before declaring any task done.
+Datos: `usuarios/{uid}/mi_lista/{itemId}`, con `itemId = tipo_tmdbId` (por ejemplo `movie_550`).
 
-## Navigation & Routing
+## Comandos
 
-- The course assignment requires **React Navigation** (native stack + bottom tabs), not Expo Router. Navigators live in `src/navigation/`, screens in `src/screens/`, and param lists in `src/types/navegacion.ts`.
+```bash
+npm test                    # Vitest (todos los *.test.ts de src/)
+npx tsc --noEmit            # tipos
+npx expo lint               # ESLint
+npx expo start              # servidor de desarrollo (Expo Go)
+npx expo install <paquete>  # SIEMPRE en lugar de npm install: elige la versión compatible con el SDK
+npx expo-doctor             # diagnóstico de dependencias y configuración
+```
 
-## Project rules (from the assignment)
+Antes de dar una tarea por terminada y antes de cada commit de código: `npm test` y
+`npx tsc --noEmit` deben pasar, y `npx expo lint` no debe dar errores.
 
-- Screens never call Firebase or TMDB directly; only `src/services/` does.
-- Every request handles loading, error and success (`EstadoPeticion<T>` in `src/types/peticion.ts`).
-- Avoid `any`; if one is unavoidable, justify it with a comment.
-- Touchable elements are at least 44 px tall (`ALTURA_TOCABLE_MIN` in `src/theme/tema.ts`).
-- Destructive actions ask for confirmation.
-- `.env` is never committed; keep `.env.example` in sync.
-- Code identifiers, comments and UI text are in Spanish.
+## Reglas
 
-## Building with EAS
+**Secretos**
+- Nunca leer, mostrar ni modificar `.env`. La configuración de Firebase y el token de TMDB no se
+  escriben en el código ni en el chat; solo se leen desde `config/env.ts`.
+- Mantener `.env.example` al día, sin valores reales.
 
-Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
-Docs: https://docs.expo.dev/eas/index.md
+**Capas y tipos**
+- Las pantallas y los componentes no importan `firebase/*` ni llaman a `fetch`: usan `src/services/`
+  a través del contexto o de hooks.
+- `src/dominio/` no importa `react-native`, `firebase` ni servicios, y no lee la fecha del sistema
+  (`new Date()` sin argumentos o `Date.now()`). El año actual o la hora se reciben como parámetro.
+- Sin `any`. Si es inevitable, se justifica con un comentario en la misma línea.
+- Cada petición expone carga, error y éxito con `EstadoPeticion<T>` (`src/types/peticion.ts`).
+- Los `switch` sobre uniones usan `assertNever`; los mapas por estado o tipo usan `Record<...>`.
 
-## Rules
+**Interfaz**
+- Colores, espacios, radios y tamaños salen de `src/tema/`. Ningún archivo fuera de `src/tema/`
+  escribe un color hexadecimal.
+- Todo elemento tocable mide al menos 44 px (`ALTURA_TOCABLE_MIN`).
+- Las acciones destructivas piden confirmación.
+- Mantener visible la atribución de TMDB, menos prominente que la marca de la app.
+- Identificadores, comentarios y textos de la interfaz en español.
 
-- If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
-- Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
-- Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+**Proceso (spec-driven)**
+- Ningún código sin un documento detrás: PRD → backlog → spec en `docs/specs/` → tests → código.
+  Si la spec no cubre un caso, se anota como punto abierto en el PRD y se pregunta; no se inventa
+  la regla.
+- En el historial, el commit `docs:` de cada cambio va antes que el de código, y en `src/dominio/`
+  el commit `test:` (tests en rojo) va antes que el `feat:`.
+- Ningún sensor se desactiva: no se borra, se salta (`.skip`, `.only`) ni se debilita un test
+  para que pase.
+- Dependencias nuevas solo si la spec las justifica, con `npx expo install` y compatibles con
+  Expo Go. No se usan librerías de gráficas: las barras se construyen con `View`.
+- Las reglas de negocio no viven en las pantallas: se calculan en `src/dominio/` y se prueban con
+  Vitest.
+
+## Commits
+
+Se hacen con la skill `/commit`. Van en español, con prefijo y en minúsculas después de él:
+
+| Prefijo | Uso |
+|---|---|
+| `docs:` | PRD, backlog, specs, diseño, auditoría, README, AGENTS.md |
+| `test:` | Tests nuevos o modificados |
+| `feat:` | Funcionalidad nueva |
+| `fix:` | Corrección de un error |
+| `chore:` | Herramientas, dependencias, configuración, cambios de rutas o de formato |
+
+Cada commit agrupa un solo cambio lógico. Nunca se incluye `.env`, y no se hace `push` si no se
+pide.
+
+## Expo
+
+- La versión del SDK es la de `expo` en `package.json` (58). Antes de usar una API de Expo o de
+  React Native, consulta `https://docs.expo.dev/versions/v58.0.0/` o
+  `https://docs.expo.dev/llms.txt`; no confíes en lo que recuerdas de otras versiones.
+- `ios/` y `android/` se generan (Continuous Native Generation): no se crean ni se editan a mano.
+  La configuración nativa va en `app.json` y en los config plugins.
+- Expo Go solo trae sus módulos nativos: no agregues librerías con código nativo propio.

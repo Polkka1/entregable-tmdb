@@ -1,12 +1,7 @@
 // Único punto de la app que habla con Firebase Auth.
 
 import { FirebaseError } from 'firebase/app';
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-} from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import type { Usuario } from '../types/usuario';
 import { ErrorApp } from '../utils/errores';
 import { auth } from './firebase';
@@ -30,7 +25,10 @@ const MENSAJE_ERROR_AUTH: Record<string, string> = {
 
 function traducirErrorAuth(error: unknown): ErrorApp {
   if (error instanceof FirebaseError) {
-    return new ErrorApp(error.code, MENSAJE_ERROR_AUTH[error.code] ?? 'No se pudo completar la operación. Intenta de nuevo.');
+    return new ErrorApp(
+      error.code,
+      MENSAJE_ERROR_AUTH[error.code] ?? 'No se pudo completar la operación. Intenta de nuevo.',
+    );
   }
   return new ErrorApp('desconocido', 'Ocurrió un error inesperado.');
 }

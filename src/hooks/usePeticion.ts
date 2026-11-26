@@ -33,9 +33,7 @@ export function usePeticion<T>(cargar: (signal: AbortSignal) => Promise<T>) {
   }, [cargar, intento]);
 
   const estado: EstadoPeticion<T> =
-    resultado && resultado.cargar === cargar && resultado.intento === intento
-      ? resultado.estado
-      : { tipo: 'cargando' };
+    resultado && resultado.cargar === cargar && resultado.intento === intento ? resultado.estado : { tipo: 'cargando' };
 
   const reintentar = useCallback(() => setIntento((n) => n + 1), []);
 

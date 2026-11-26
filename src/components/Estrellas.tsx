@@ -3,10 +3,7 @@ import { ALTURA_TOCABLE_MIN, colores } from '../tema/tema';
 import { CALIFICACION_MAX, CALIFICACION_MIN } from '../types/lista';
 import { Icono } from './Icono';
 
-const VALORES = Array.from(
-  { length: CALIFICACION_MAX - CALIFICACION_MIN + 1 },
-  (_, i) => CALIFICACION_MIN + i,
-);
+const VALORES = Array.from({ length: CALIFICACION_MAX - CALIFICACION_MIN + 1 }, (_, i) => CALIFICACION_MIN + i);
 
 interface Props {
   valor: number | null;

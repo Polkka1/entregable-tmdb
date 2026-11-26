@@ -92,9 +92,7 @@ function aItemLista(id: string, d: DocumentData): ItemLista | null {
 export function obtenerLista(uid: string): Promise<ItemLista[]> {
   return ejecutar(async () => {
     const instantanea = await getDocs(query(coleccionLista(uid), orderBy('agregadoEn', 'desc')));
-    return instantanea.docs
-      .map((d) => aItemLista(d.id, d.data()))
-      .filter((item): item is ItemLista => item !== null);
+    return instantanea.docs.map((d) => aItemLista(d.id, d.data())).filter((item): item is ItemLista => item !== null);
   });
 }
 

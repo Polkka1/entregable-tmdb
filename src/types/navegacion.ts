@@ -18,10 +18,7 @@ export type RootStackParamList = {
   EditarEntrada: { itemId: string };
 };
 
-export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<
-  RootStackParamList,
-  T
->;
+export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, T>;
 
 // Una pestaña también puede navegar a las pantallas de la pila que la contiene.
 export type TabsScreenProps<T extends keyof TabsParamList> = CompositeScreenProps<

@@ -48,8 +48,8 @@ export function AcercaDeScreen() {
       </View>
 
       <Text style={styles.parrafo}>
-        Busca películas y series, agrégalas a tu lista personal y organízalas por estado: por ver, viendo o
-        vista. Califica y comenta lo que ya viste. Tu lista es privada.
+        Busca películas y series, agrégalas a tu lista personal y organízalas por estado: por ver, viendo o vista.
+        Califica y comenta lo que ya viste. Tu lista es privada.
       </Text>
 
       <View style={styles.tarjeta}>
@@ -59,8 +59,8 @@ export function AcercaDeScreen() {
         <TmdbLogo ancho={120} />
         <Text style={styles.aviso}>{AVISO_TMDB}</Text>
         <Text style={styles.parrafoSecundario}>
-          Los datos de películas y series, las imágenes y el elenco provienen de The Movie Database (TMDB). Esta
-          app es un proyecto académico sin fines comerciales.
+          Los datos de películas y series, las imágenes y el elenco provienen de The Movie Database (TMDB). Esta app es
+          un proyecto académico sin fines comerciales.
         </Text>
         <Boton
           titulo="Visitar themoviedb.org"

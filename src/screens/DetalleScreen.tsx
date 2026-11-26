@@ -38,10 +38,7 @@ export function DetalleScreen({ route, navigation }: RootStackScreenProps<'Detal
       );
     case 'exito':
       return (
-        <ContenidoDetalle
-          obra={estado.datos}
-          onEditar={(itemId) => navigation.navigate('EditarEntrada', { itemId })}
-        />
+        <ContenidoDetalle obra={estado.datos} onEditar={(itemId) => navigation.navigate('EditarEntrada', { itemId })} />
       );
     default:
       return assertNever(estado);
@@ -98,7 +95,12 @@ function ContenidoDetalle({ obra, onEditar }: { obra: DetalleObra; onEditar: (it
       </View>
 
       {yaEnLista ? (
-        <Boton titulo="En mi lista · Editar" icono="checkmark-circle" variante="secundario" onPress={() => onEditar(itemId)} />
+        <Boton
+          titulo="En mi lista · Editar"
+          icono="checkmark-circle"
+          variante="secundario"
+          onPress={() => onEditar(itemId)}
+        />
       ) : (
         <Boton titulo="Agregar a mi lista" icono="add-circle-outline" cargando={agregando} onPress={agregarALista} />
       )}

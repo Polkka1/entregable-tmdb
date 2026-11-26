@@ -25,11 +25,7 @@ export function Poster({ path, uso, ancho, alto = Math.round(ancho * 1.5), descr
   if (!url || fallo) {
     const icono: NombreIcono = uso === 'perfil' ? 'person' : 'film-outline';
     return (
-      <View
-        style={[styles.relleno, dimensiones]}
-        accessible
-        accessibilityLabel={`${descripcion} (sin imagen)`}
-      >
+      <View style={[styles.relleno, dimensiones]} accessible accessibilityLabel={`${descripcion} (sin imagen)`}>
         <Icono name={icono} size={Math.round(ancho * 0.4)} color={colores.textoSecundario} />
       </View>
     );

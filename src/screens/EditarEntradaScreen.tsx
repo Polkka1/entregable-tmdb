@@ -7,7 +7,14 @@ import { Estrellas } from '../components/Estrellas';
 import { Poster } from '../components/Poster';
 import { useCartelera } from '../context/CarteleraContext';
 import { colores, espacio, radio } from '../tema/tema';
-import { ESTADOS, ETIQUETA_ESTADO, ETIQUETA_TIPO, MAX_COMENTARIO, type EstadoVisto, type ItemLista } from '../types/lista';
+import {
+  ESTADOS,
+  ETIQUETA_ESTADO,
+  ETIQUETA_TIPO,
+  MAX_COMENTARIO,
+  type EstadoVisto,
+  type ItemLista,
+} from '../types/lista';
 import type { RootStackScreenProps } from '../types/navegacion';
 import { mensajeDeError } from '../utils/errores';
 
@@ -94,7 +101,12 @@ function FormularioEntrada({ item, onTerminar }: { item: ItemLista; onTerminar: 
           <Text style={styles.etiqueta}>Estado</Text>
           <View style={styles.filaChips} accessibilityRole="radiogroup">
             {ESTADOS.map((e) => (
-              <Chip key={e} etiqueta={ETIQUETA_ESTADO[e]} seleccionado={estado === e} onPress={() => cambiarEstado(e)} />
+              <Chip
+                key={e}
+                etiqueta={ETIQUETA_ESTADO[e]}
+                seleccionado={estado === e}
+                onPress={() => cambiarEstado(e)}
+              />
             ))}
           </View>
         </View>

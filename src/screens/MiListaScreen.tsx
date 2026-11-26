@@ -6,14 +6,7 @@ import { Cargando, MensajeVacio } from '../components/EstadosPantalla';
 import { TarjetaLista } from '../components/TarjetaLista';
 import { useCartelera } from '../context/CarteleraContext';
 import { colores, espacio } from '../tema/tema';
-import {
-  ESTADOS,
-  ETIQUETA_ESTADO,
-  TIPOS,
-  type EstadoVisto,
-  type ItemLista,
-  type TipoMedio,
-} from '../types/lista';
+import { ESTADOS, ETIQUETA_ESTADO, TIPOS, type EstadoVisto, type ItemLista, type TipoMedio } from '../types/lista';
 import type { TabsScreenProps } from '../types/navegacion';
 
 type Filtro<T extends string> = T | 'todos';
@@ -33,8 +26,7 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
     () =>
       lista.filter(
         (i) =>
-          (filtroEstado === 'todos' || i.estado === filtroEstado) &&
-          (filtroTipo === 'todos' || i.tipo === filtroTipo),
+          (filtroEstado === 'todos' || i.estado === filtroEstado) && (filtroTipo === 'todos' || i.tipo === filtroTipo),
       ),
     [lista, filtroEstado, filtroTipo],
   );
@@ -83,7 +75,11 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
       {sinConexion && <AvisoSinConexion />}
       <View style={styles.filtros}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filaChips}>
-          <Chip etiqueta={`Todos (${lista.length})`} seleccionado={filtroEstado === 'todos'} onPress={() => setFiltroEstado('todos')} />
+          <Chip
+            etiqueta={`Todos (${lista.length})`}
+            seleccionado={filtroEstado === 'todos'}
+            onPress={() => setFiltroEstado('todos')}
+          />
           {ESTADOS.map((e) => (
             <Chip
               key={e}
@@ -113,7 +109,12 @@ export function MiListaScreen({ navigation }: TabsScreenProps<'MiLista'>) {
         contentContainerStyle={[styles.lista, filtrada.length === 0 && styles.listaVacia]}
         ItemSeparatorComponent={Separador}
         refreshControl={
-          <RefreshControl refreshing={refrescando} onRefresh={alRefrescar} tintColor={colores.acento} colors={[colores.acento]} />
+          <RefreshControl
+            refreshing={refrescando}
+            onRefresh={alRefrescar}
+            tintColor={colores.acento}
+            colors={[colores.acento]}
+          />
         }
         ListEmptyComponent={
           <MensajeVacio icono="funnel-outline" titulo="Nada por aquí" descripcion="No hay obras con estos filtros." />

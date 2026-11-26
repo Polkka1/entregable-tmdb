@@ -37,9 +37,7 @@ function construirConsulta(params: ParamsConsulta): string {
 
 function peticionTmdb<T>(ruta: string, params: ParamsConsulta = {}, signal?: AbortSignal): Promise<T> {
   if (!TMDB_TOKEN) {
-    return Promise.reject(
-      new ErrorHttp('no_autorizado', null, 'Falta EXPO_PUBLIC_TMDB_TOKEN en el archivo .env.'),
-    );
+    return Promise.reject(new ErrorHttp('no_autorizado', null, 'Falta EXPO_PUBLIC_TMDB_TOKEN en el archivo .env.'));
   }
   const url = `${URL_BASE}${ruta}?${construirConsulta({ language: IDIOMA, ...params })}`;
   return obtenerJson<T>(url, {

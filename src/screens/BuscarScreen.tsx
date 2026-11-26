@@ -14,8 +14,7 @@ import { crearItemId } from '../utils/lista';
 
 export function BuscarScreen({ navigation }: TabsScreenProps<'Buscar'>) {
   const [texto, setTexto] = useState('');
-  const { consulta, estado, hayMas, cargandoMas, errorMas, cargarMas, reintentar, minCaracteres } =
-    useBusqueda(texto);
+  const { consulta, estado, hayMas, cargandoMas, errorMas, cargarMas, reintentar, minCaracteres } = useBusqueda(texto);
   const { lista } = useCartelera();
   const idsEnLista = useMemo(() => new Set(lista.map((i) => i.id)), [lista]);
 

@@ -19,7 +19,14 @@ const COLOR_TEXTO: Record<Variante, string> = {
   peligro: colores.peligro,
 };
 
-export function Boton({ titulo, onPress, variante = 'primario', icono, cargando = false, deshabilitado = false }: Props) {
+export function Boton({
+  titulo,
+  onPress,
+  variante = 'primario',
+  icono,
+  cargando = false,
+  deshabilitado = false,
+}: Props) {
   const inactivo = deshabilitado || cargando;
   const colorTexto = COLOR_TEXTO[variante];
 

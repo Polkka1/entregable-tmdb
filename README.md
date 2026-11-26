@@ -7,6 +7,47 @@ App móvil (React Native + Expo + TypeScript) para buscar películas y series en
 Proyecto de integración de **DIM 4080 Tecnologías Emergentes (USFQ)**: Firebase Auth, Firestore
 y una API externa pública en una sola app.
 
+## Entregable 3: Mi año en cine
+
+La app suma una pestaña, **Mi año en cine**, con el resumen de lo que el usuario vio en un año:
+- las obras vistas (películas y series) y las horas de cine;
+- el género y el director más vistos;
+- el mes más activo, con una barra por mes;
+- la obra destacada;
+- un selector de año.
+
+Para hacerlo posible, cada obra guarda cuándo se vio (`vistaEn`) y sus géneros, su duración y sus
+directores de TMDB. Las obras guardadas antes de esta épica se migran solas al abrir la pestaña.
+
+El trabajo siguió un proceso *spec-driven*, visible en el historial de la rama `epica-mi-anio`:
+auditoría, harness, PRD, backlog, diseño, spec, tests y código.
+
+| Documento | Contenido |
+| --- | --- |
+| [AGENTS.md](AGENTS.md) · [CLAUDE.md](CLAUDE.md) | Instrucciones del agente: capas, comandos y reglas |
+| [DESIGN.md](DESIGN.md) | Sistema de diseño: tokens, componentes, pantallas y voz |
+| [docs/AUDITORIA.md](docs/AUDITORIA.md) | Auditoría inicial y de cierre |
+| [docs/prd/PRD.md](docs/prd/PRD.md) | RF1 a RF10 del Proyecto 3 y las decisiones D1 a D13 de la épica |
+| [docs/backlog/](docs/backlog/EA-mi-anio-en-cine.md) | Historias HU-A.1 a HU-A.5, criterios y tickets |
+| [docs/specs/](docs/specs/) | Spec de la épica (01) y de la interfaz (02) |
+| [docs/diseno/](docs/diseno/) | Brief de marca y [brand board](docs/diseno/brand-board.html) (se abre en el navegador) |
+| [docs/VERIFICACION.md](docs/VERIFICACION.md) | Verificación humana en el teléfono |
+| [docs/IA.md](docs/IA.md) | Cinco momentos clave del uso de IA |
+
+### Cómo correr los tests
+
+```bash
+npm install
+npm test              # Vitest: dominio del resumen, textos, regla RF6 y los sensores de diseño
+npx tsc --noEmit      # tipos
+npx expo lint         # ESLint
+```
+
+Los tests no necesitan `.env` ni conexión. Fijan la zona horaria en `America/Guayaquil`, así que
+dan el mismo resultado en cualquier máquina. Dos de ellos son sensores del sistema de diseño:
+fallan si un archivo fuera de `src/tema/` escribe un color hexadecimal o si una pantalla escribe
+un `fontSize` suelto.
+
 ## Objetivo
 
 Construir una app móvil que combine autenticación con Firebase Auth, datos propios en Firestore
@@ -30,6 +71,7 @@ y la API pública de TMDB, escrita en TypeScript y ejecutable en un dispositivo 
 | Detalle de TMDB | Póster, sinopsis, calificación, elenco y botón **Agregar a mi lista** | Pantalla de la pila |
 | Mi lista | Filtros por estado y tipo; tarjetas con calificación personal | Pestaña inferior |
 | Editar mi entrada | Selector de estado, calificación, comentario y botón **Quitar** | Modal de la pila |
+| Mi año en cine | Resumen anual: total, obra destacada, barras por mes, horas, género y director | Pestaña inferior |
 | Acerca de | Atribución y logo de TMDB, datos de la app y cerrar sesión | Pestaña inferior |
 
 ## Estado del desarrollo
@@ -103,6 +145,8 @@ curl -H "Authorization: Bearer $EXPO_PUBLIC_TMDB_TOKEN" \
 | `npm run dev` | Inicia el servidor de desarrollo de Expo |
 | `npm run typecheck` | Revisa los tipos con el compilador de TypeScript |
 | `npm run lint` | Revisa el código con ESLint |
+| `npm test` | Ejecuta los tests de Vitest |
+| `npm run format` | Formatea el código con Prettier (`format:check` solo revisa) |
 
 ## Arquitectura
 
@@ -122,8 +166,9 @@ App.tsx                     Proveedores y navegación raíz
 src/
 ├── components/             Componentes reutilizables (Poster, Boton, Chip, Estrellas, TmdbLogo…)
 ├── config/env.ts           Lectura de variables de entorno
-├── context/                SesionContext (usuario) y CarteleraContext (lista y acciones)
-├── hooks/                  usePeticion<T>, useBusqueda, useDebounce
+├── context/                SesionContext (usuario) y CarteleraContext (lista, acciones, migración y completado)
+├── dominio/                Reglas puras de Mi año en cine (resumenAnual, vistaEn, datosTmdb) y sus tests
+├── hooks/                  usePeticion<T>, useBusqueda, useDebounce, useResumenAnual
 ├── navigation/             RootNavigator (pila) y TabsNavigator (pestañas)
 ├── screens/                Una pantalla por archivo
 ├── services/
@@ -133,7 +178,7 @@ src/
 │   ├── cacheService.ts     Copia de la lista en AsyncStorage
 │   ├── http.ts             fetch genérico con tiempo máximo, cancelación y errores en español
 │   └── tmdbService.ts      buscar, obtenerDetalle, construirUrlImagen
-├── tema/tema.ts            Colores, espacios y alto mínimo tocable (44 px)
+├── tema/                   Tokens de DESIGN.md (colores, tipografía, espacios, radios, 44 px) y sensores
 ├── types/                  Tipos de dominio, de la API de TMDB, de navegación y EstadoPeticion<T>
 └── utils/                  Funciones puras (formato, itemId, regla de calificación, assertNever)
 firestore.rules             Reglas de seguridad publicadas en Firestore
@@ -155,6 +200,10 @@ Ruta: `usuarios/{uid}/mi_lista/{itemId}`. El `itemId` combina tipo y id de TMDB
 | `calificacionPersonal` | número o nulo | 1 a 5; solo si el estado es `vista` |
 | `comentario` | texto | Hasta 500 caracteres |
 | `agregadoEn` / `actualizadoEn` | marca de tiempo | `serverTimestamp()` |
+| `vistaEn` | marca de tiempo o nulo | Cuándo pasó a *Vista*; nulo si no lo está (Entregable 3) |
+| `generos` | lista de texto | Géneros de TMDB en español, máximo 10; si falta, la obra se completa al abrir el resumen |
+| `duracionMin` | número o nulo | Minutos de la película; nulo en series |
+| `directores` | lista de texto | Directores de la película, máximo 10; vacía en series |
 
 Las reglas permiten leer y escribir solo al dueño (`request.auth.uid == uid`) y validan en el
 servidor los campos permitidos, sus tipos, el formato del `itemId`, el límite del comentario,
@@ -211,4 +260,5 @@ Uso gratuito y solo no comercial, según los [términos de TMDB](https://www.the
 ## Uso de IA
 
 Este proyecto usó asistencia de IA (Claude Code) para generar código, que el equipo revisó y
-puede explicar. El detalle está en la [bitácora de IA](docs/BITACORA_IA.md).
+puede explicar. El detalle del Proyecto 3 está en la [bitácora de IA](docs/BITACORA_IA.md), y el
+del Entregable 3, en [docs/IA.md](docs/IA.md).

@@ -4,15 +4,50 @@
 experiencia se comprueba a mano en el teléfono, con Expo Go. La columna **Resultado obtenido** la
 llena el estudiante durante la prueba: ✅ si coincide con lo esperado, o ❌ con lo que pasó.
 
-**Teléfono y versión:** ____________________ · **Fecha:** ____________ · **Cuenta:** cuenta1
+**Teléfono y versión:** iPhone 15 Pro Max, iOS 27.2.1 · **Fecha:** 25/11/26 · **Cuenta:** cuenta1
+
+## 0. Datos de prueba
+
+La pestaña *Mi año en cine* solo muestra años anteriores si hay obras vistas en esos años. Como la
+app guarda `vistaEn` con la hora del servidor, esas obras no se pueden crear desde el teléfono. Por
+eso, `scripts/sembrarDatosPrueba.mjs` crea en la lista de una cuenta este conjunto de obras reales
+de TMDB, que cubre cada regla:
+
+| Grupo | Obras | Para probar |
+|---|---|---|
+| 2025, con datos | *Origen*, *Interstellar*, *El caballero oscuro* (Nolan: 3 películas), *Parásitos*, *Breaking Bad* (serie) y *Pulp Fiction*, vista el **31/12/2025 a las 23:30** hora local | Resumen de 2025, director más visto (D9), límite del año (D3), destacada con empate (D11) |
+| 2025, sin datos | *El club de la lucha* y *Stranger Things* (serie): sin `generos`, `duracionMin` ni `directores` | Completado desde TMDB al elegir 2025, con progreso (D6, CA-A.4.5 y CA-A.4.6) |
+| 2024, con datos | *Dune*, *El viaje de Chihiro*, *Forrest Gump* y *Juego de tronos* (serie) | Selector con varios años (D4), barras por mes (D10) |
+| Anterior a la épica | *Oppenheimer*: vista, sin `vistaEn` y sin datos | Migración de la fecha al abrir (D2, CA-A.4.1) y completado (D6) |
+| Control | *Barbie* en *Por ver* y *Severance* en *Viendo* | No cuentan en ningún resumen (D3) |
+
+**Cómo se usa** (en la raíz del proyecto, con las reglas de Firestore publicadas):
+
+```bash
+node --env-file=.env scripts/sembrarDatosPrueba.mjs                    # crea las obras
+node --env-file=.env scripts/sembrarDatosPrueba.mjs --solo-anteriores  # sin el grupo "anterior a la épica"
+node --env-file=.env scripts/sembrarDatosPrueba.mjs --borrar           # borra solo las obras que creó
+```
+
+- Pide el correo y la contraseña de la cuenta en la terminal. Las credenciales no se guardan en
+  ningún archivo.
+- Lee `EXPO_PUBLIC_FIREBASE_*` y `EXPO_PUBLIC_TMDB_TOKEN` del `.env` local y trae de TMDB el
+  título, el año, el póster, los géneros, la duración y los directores.
+- Usa la misma ruta que la app y respeta las reglas publicadas. Cada obra se crea en *Por ver* y
+  después se marca como vista con su fecha, porque las reglas no admiten crear una obra ya vista.
+- No toca las obras que ya están en la lista: si un id existe, lo salta y lo informa.
+
+**Año vacío para la demo (D12):** por D4, el único año del selector que puede estar vacío es el
+actual. Para mostrar el estado vacío, usa una cuenta sin obras vistas este año; por ejemplo,
+cuenta2 sembrada con `--solo-anteriores`.
 
 ## 1. Verificación automática
 
 | Comando | Resultado esperado | Resultado obtenido |
 |---|---|---|
-| `npm test` | 7 archivos y 101 tests en verde (dominio, textos, RF6/RF4, colores fijos y tamaños sueltos) | |
-| `npx tsc --noEmit` | Sin errores | |
-| `npx expo lint` | Sin errores ni advertencias | |
+| `npm test` | 7 archivos y 101 tests en verde (dominio, textos, RF6/RF4, colores fijos y tamaños sueltos) | ✅ |
+| `npx tsc --noEmit` | Sin errores | ✅ |
+| `npx expo lint` | Sin errores ni advertencias | ✅ |
 
 Captura: `docs/npm-test-verde.png`.
 
@@ -20,9 +55,9 @@ Captura: `docs/npm-test-verde.png`.
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.1.10 | Rules Playground: `update` con `duracionMin: -5` sobre una obra real | Denegado en `camposNuevosValidos` (`docs/reglas-duracion-negativa.png`) | |
-| CA-A.1.10 | Rules Playground: `update` con `vistaEn` sobre una obra en *Por ver* | Denegado (`docs/reglas-vistaen-por-ver.png`) | |
-| CA-A.1.12 | Rules Playground: `get` de la lista de A autenticado como B | Denegado (`docs/reglas-cuenta2-denegada-e3.png`); A sí puede leer (`docs/reglas-dueno-permitido.png`) | |
+| CA-A.1.10 | Rules Playground: `update` con `duracionMin: -5` sobre una obra real | Denegado en `camposNuevosValidos` (`docs/reglas-duracion-negativa.png`) | ✅ |
+| CA-A.1.10 | Rules Playground: `update` con `vistaEn` sobre una obra en *Por ver* | Denegado (`docs/reglas-vistaen-por-ver.png`) | ✅ |
+| CA-A.1.12 | Rules Playground: `get` de la lista de A autenticado como B | Denegado (`docs/reglas-cuenta2-denegada-e3.png`); A sí puede leer (`docs/reglas-dueno-permitido.png`) | ✅ |
 
 ## 3. En el teléfono
 
@@ -32,52 +67,52 @@ Antes de empezar: cierra Expo Go y vuelve a abrir la app, para que cargue la ver
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.1.6 | Buscar una película (por ejemplo *Dune: Parte dos*) → *Agregar a mi lista* → abrir su documento en la consola | El documento tiene `generos` en español, `duracionMin` y `directores` (`docs/firestore-campos-nuevos.png`) | |
-| CA-A.1.7 | Agregar una serie y ver su documento | `generos` con datos, `duracionMin: null`, `directores: []` | |
-| CA-A.1.1 | Mi lista → la película → estado *Vista* → *Guardar* | En la consola aparece `vistaEn` con la hora de ahora | |
-| CA-A.1.4 | Cambiar solo las estrellas o el comentario de esa obra y guardar | `vistaEn` no cambia | |
-| CA-A.1.2 | Cambiar la obra a *Por ver* y guardar | `vistaEn` es `null` y la calificación se borra | |
-| CA-A.1.3 | Volver a marcarla como *Vista* | `vistaEn` toma la hora nueva | |
-| CA-A.1.11 | Editar el comentario de una obra agregada antes de la épica | Se guarda sin error | |
+| CA-A.1.6 | Buscar una película (por ejemplo *Dune: Parte dos*) → *Agregar a mi lista* → abrir su documento en la consola | El documento tiene `generos` en español, `duracionMin` y `directores` (`docs/firestore-campos-nuevos.png`) | ✅ |
+| CA-A.1.7 | Agregar una serie y ver su documento | `generos` con datos, `duracionMin: null`, `directores: []` | ✅ |
+| CA-A.1.1 | Mi lista → la película → estado *Vista* → *Guardar* | En la consola aparece `vistaEn` con la hora de ahora | ✅ |
+| CA-A.1.4 | Cambiar solo las estrellas o el comentario de esa obra y guardar | `vistaEn` no cambia | ✅ |
+| CA-A.1.2 | Cambiar la obra a *Por ver* y guardar | `vistaEn` es `null` y la calificación se borra | ✅ |
+| CA-A.1.3 | Volver a marcarla como *Vista* | `vistaEn` toma la hora nueva | ✅ |
+| CA-A.1.11 | Editar el comentario de una obra agregada antes de la épica | Se guarda sin error | ✅ |
 
 ### HU-A.4 · Obras anteriores a la épica
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.4.1 | Con una obra *Vista* antigua (sin `vistaEn`), abrir la pestaña **Mi año** con conexión | En la consola, la obra recibe `vistaEn` = su `actualizadoEn` anterior, y cuenta en ese año | |
-| CA-A.4.4 | Revisar ese documento | Estado, calificación, comentario y datos de TMDB siguen iguales | |
-| CA-A.4.5 | Con obras vistas del año sin `generos` (anteriores a la épica), abrir **Mi año** | Se ve "Completando datos · n de m obras"; al terminar, las obras tienen `generos` en la consola | |
-| CA-A.4.7 | Si alguna obra no se pudo completar | Aviso "1 obra quedó sin datos de TMDB: …" | |
-| CA-A.4.8 | Activar el modo avión durante el completado, salir, desactivarlo y reiniciar la app | Las obras que fallaron se vuelven a intentar | |
-| CA-A.4.10 | Cambiar de año mientras se completan datos | Se detiene el del año anterior y sigue con el nuevo | |
+| CA-A.4.1 | Con una obra *Vista* antigua (sin `vistaEn`), abrir la pestaña **Mi año** con conexión | En la consola, la obra recibe `vistaEn` = su `actualizadoEn` anterior, y cuenta en ese año | ✅ |
+| CA-A.4.4 | Revisar ese documento | Estado, calificación, comentario y datos de TMDB siguen iguales | ✅ |
+| CA-A.4.5 | Con obras vistas del año sin `generos` (anteriores a la épica), abrir **Mi año** | Se ve "Completando datos · n de m obras"; al terminar, las obras tienen `generos` en la consola | ✅ |
+| CA-A.4.7 | Si alguna obra no se pudo completar | Aviso "1 obra quedó sin datos de TMDB: …" | ✅ |
+| CA-A.4.8 | Activar el modo avión durante el completado, salir, desactivarlo y reiniciar la app | Las obras que fallaron se vuelven a intentar | ✅ |
+| CA-A.4.10 | Cambiar de año mientras se completan datos | Se detiene el del año anterior y sigue con el nuevo | ✅ |
 
 ### HU-A.2 · Resumen del año
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.2.3 | Abrir **Mi año** en el año actual | Total grande ("n obras") y "x películas · y series" correctos | |
-| CA-A.2.16 | Mirar la obra destacada | Es la de mayor calificación del año, con póster, estrellas y "vista el …" | |
-| CA-A.2.18 | Con un año sin obras calificadas | La tarjeta invita a calificar, con *Ir a Mi lista* | |
-| CA-A.2.14 | Mirar las barras | Hay 12 meses; los meses en 0 tienen una barra mínima; el mes más activo va en dorado y figura en el encabezado | |
-| CA-A.2.6 | Si hay películas sin duración | La tarjeta de horas dice "n película(s) sin duración no suma(n) horas." | |
-| CA-A.2.13 | Si ninguna película tiene director | La tarjeta Director dice "Aún no hay datos suficientes" | |
-| CA-A.2.19 | Con **Mi año** abierto, ir a Mi lista, marcar otra obra como *Vista* y volver | El total, el mes y las tarjetas ya la incluyen | |
+| CA-A.2.3 | Abrir **Mi año** en el año actual | Total grande ("n obras") y "x películas · y series" correctos | ✅ |
+| CA-A.2.16 | Mirar la obra destacada | Es la de mayor calificación del año, con póster, estrellas y "vista el …" | ✅ |
+| CA-A.2.18 | Con un año sin obras calificadas | La tarjeta invita a calificar, con *Ir a Mi lista* | ✅ |
+| CA-A.2.14 | Mirar las barras | Hay 12 meses; los meses en 0 tienen una barra mínima; el mes más activo va en dorado y figura en el encabezado | ✅ |
+| CA-A.2.6 | Si hay películas sin duración | La tarjeta de horas dice "n película(s) sin duración no suma(n) horas." | ✅ |
+| CA-A.2.13 | Si ninguna película tiene director | La tarjeta Director dice "Aún no hay datos suficientes" | ✅ |
+| CA-A.2.19 | Con **Mi año** abierto, ir a Mi lista, marcar otra obra como *Vista* y volver | El total, el mes y las tarjetas ya la incluyen | ✅ |
 
 ### HU-A.3 · Cambiar de año
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.3.5 | Abrir **Mi año** | El selector está en el año actual | |
-| CA-A.3.1 | Mirar los años del selector | Solo años con obras vistas, más el actual, del más reciente al más antiguo | |
-| CA-A.3.6 | Elegir otro año | Todas las tarjetas cambian a ese año | |
-| CA-A.3.7 | Elegir un año sin obras vistas (o el actual, si no hay) | "Aún no hay obras vistas en {año}." con *Ir a Mi lista*, que abre Mi lista (`docs/resumen-vacio.png`) | |
+| CA-A.3.5 | Abrir **Mi año** | El selector está en el año actual | ✅ |
+| CA-A.3.1 | Mirar los años del selector | Solo años con obras vistas, más el actual, del más reciente al más antiguo | ✅ |
+| CA-A.3.6 | Elegir otro año | Todas las tarjetas cambian a ese año | ✅ |
+| CA-A.3.7 | Elegir un año sin obras vistas (o el actual, si no hay) | "Aún no hay obras vistas en {año}." con *Ir a Mi lista*, que abre Mi lista (`docs/resumen-vacio.png`) | ✅ |
 
 ### HU-A.5 · Estados
 
 | Criterio | Pasos | Resultado esperado | Resultado obtenido |
 |---|---|---|---|
-| CA-A.5.1 | Abrir **Mi año** justo después de iniciar la app | "Preparando tu año…" con indicador | |
-| CA-A.5.3 | Modo avión → reiniciar la app → abrir **Mi año** | El resumen sale de la copia local, con el aviso sin conexión; nada cambia en la consola | |
+| CA-A.5.1 | Abrir **Mi año** justo después de iniciar la app | "Preparando tu año…" con indicador | ✅ |
+| CA-A.5.3 | Modo avión → reiniciar la app → abrir **Mi año** | El resumen sale de la copia local, con el aviso sin conexión; nada cambia en la consola | ✅ |
 | CA-A.5.4 | Igual que la anterior, con alguna obra vista sin fecha | El aviso dice cuántas obras vistas aún no tienen fecha | |
 | CA-A.5.2 | (Difícil de provocar) Un error del servidor al migrar | Mensaje "No pudimos preparar tu resumen." con *Reintentar* | |
 

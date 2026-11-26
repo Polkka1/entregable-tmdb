@@ -1,4 +1,5 @@
 import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
+import { colores } from '../tema/tema';
 
 // Logo oficial "blue_short" de TMDB (https://www.themoviedb.org/about/logos-attribution).
 // Se incluye en la app para que funcione sin conexión.
@@ -16,9 +17,9 @@ export function TmdbLogo({ ancho }: { ancho: number }) {
     >
       <Defs>
         <LinearGradient id="tmdbGradiente" x1="0" y1="17.76" x2="273.42" y2="17.76" gradientUnits="userSpaceOnUse">
-          <Stop offset="0" stopColor="#90cea1" />
-          <Stop offset="0.56" stopColor="#3cbec9" />
-          <Stop offset="1" stopColor="#00b3e5" />
+          <Stop offset="0" stopColor={colores.tmdb1} />
+          <Stop offset="0.56" stopColor={colores.tmdb2} />
+          <Stop offset="1" stopColor={colores.tmdb3} />
         </LinearGradient>
       </Defs>
       <Path

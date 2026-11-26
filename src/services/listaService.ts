@@ -13,6 +13,8 @@ import {
   setDoc,
   Timestamp,
   updateDoc,
+  where,
+  writeBatch,
   type DocumentData,
   type FieldValue,
 } from 'firebase/firestore';
@@ -28,7 +30,7 @@ import {
   type TipoMedio,
 } from '../types/lista';
 import { ErrorApp, conTiempoMaximo } from '../utils/errores';
-import { cambioVistaEn, type CambioVistaEn } from '../dominio/vistaEn';
+import { cambioVistaEn, obrasSinFecha, type CambioVistaEn } from '../dominio/vistaEn';
 import { crearItemId, normalizarCambios } from '../utils/lista';
 import { db } from './firebase';
 
@@ -159,4 +161,44 @@ export function actualizarItem(
 
 export function eliminarItem(uid: string, itemId: string): Promise<void> {
   return ejecutar(() => deleteDoc(documentoItem(uid, itemId)));
+}
+
+/** Un lote de Firestore admite como máximo 500 escrituras. */
+const MAX_ESCRITURAS_POR_LOTE = 500;
+
+/**
+ * D2: las obras en vista que no tienen vistaEn (anteriores a la épica) reciben vistaEn = actualizadoEn.
+ * La escritura cambia actualizadoEn, como exigen las reglas (PA-7). Devuelve cuántas obras migró.
+ */
+export function migrarFechasVista(uid: string): Promise<number> {
+  return ejecutar(async () => {
+    const instantanea = await getDocs(query(coleccionLista(uid), where('estado', '==', 'vista')));
+    const actualizadoEnPorId = new Map<string, Timestamp>();
+    const items: ItemLista[] = [];
+    for (const d of instantanea.docs) {
+      const datos = d.data();
+      const item = aItemLista(d.id, datos);
+      if (item && datos.actualizadoEn instanceof Timestamp) {
+        items.push(item);
+        actualizadoEnPorId.set(d.id, datos.actualizadoEn);
+      }
+    }
+    const porMigrar = obrasSinFecha(items);
+    for (let inicio = 0; inicio < porMigrar.length; inicio += MAX_ESCRITURAS_POR_LOTE) {
+      const lote = writeBatch(db);
+      for (const item of porMigrar.slice(inicio, inicio + MAX_ESCRITURAS_POR_LOTE)) {
+        lote.update(documentoItem(uid, item.id), {
+          vistaEn: actualizadoEnPorId.get(item.id),
+          actualizadoEn: serverTimestamp(),
+        });
+      }
+      await lote.commit();
+    }
+    return porMigrar.length;
+  });
+}
+
+/** D6: guarda los datos de TMDB de una obra que no los tenía. */
+export function guardarDatosTmdb(uid: string, itemId: string, datos: DatosTmdb): Promise<void> {
+  return ejecutar(() => updateDoc(documentoItem(uid, itemId), { ...datos, actualizadoEn: serverTimestamp() }));
 }

@@ -1,8 +1,18 @@
 import { addNetworkStateListener, useNetworkState } from 'expo-network';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { guardarCopiaLista, leerCopiaLista } from '../services/cacheService';
-import { actualizarItem, agregarItem, eliminarItem, obtenerLista } from '../services/listaService';
-import type { CambiosEntrada, ItemLista, NuevaEntrada } from '../types/lista';
+import { datosParaGuardar, datosVacios } from '../dominio/datosTmdb';
+import { ErrorHttp } from '../services/http';
+import {
+  actualizarItem,
+  agregarItem,
+  eliminarItem,
+  guardarDatosTmdb,
+  migrarFechasVista,
+  obtenerLista,
+} from '../services/listaService';
+import { obtenerDetalle } from '../services/tmdbService';
+import type { CambiosEntrada, DatosTmdb, ItemLista, NuevaEntrada } from '../types/lista';
 import type { Usuario } from '../types/usuario';
 import { ErrorApp } from '../utils/errores';
 import { crearItemId } from '../utils/lista';
@@ -29,6 +39,10 @@ interface CarteleraContextValor {
   agregar: (entrada: NuevaEntrada) => Promise<void>;
   actualizar: (itemId: string, cambios: CambiosEntrada) => Promise<void>;
   eliminar: (itemId: string) => Promise<void>;
+  /** D2: da fecha a las obras vistas antes de la épica. Devuelve cuántas migró. Exige conexión (D13). */
+  migrarFechas: () => Promise<number>;
+  /** D6: trae de TMDB los géneros, la duración y los directores de una obra. Exige conexión (D13). */
+  completarDatos: (item: ItemLista) => Promise<void>;
 }
 
 const CarteleraContext = createContext<CarteleraContextValor | null>(null);
@@ -132,6 +146,32 @@ export function CarteleraProvider({ usuario, children }: { usuario: Usuario; chi
     [exigirConexion, uid],
   );
 
+  const migrarFechas = useCallback(async () => {
+    exigirConexion();
+    const migradas = await migrarFechasVista(uid);
+    // La fecha la copia el servidor (vistaEn = actualizadoEn): se vuelve a leer la lista.
+    if (migradas > 0) await sincronizar();
+    return migradas;
+  }, [exigirConexion, sincronizar, uid]);
+
+  const completarDatos = useCallback(
+    async (item: ItemLista) => {
+      exigirConexion();
+      let datos: DatosTmdb;
+      try {
+        const detalle = await obtenerDetalle(item.tipo, item.tmdbId);
+        datos = datosParaGuardar(item.tipo, detalle);
+      } catch (error) {
+        // PA-3: si TMDB ya no tiene la obra (404) se guarda sin datos para no volver a consultarla.
+        if (!(error instanceof ErrorHttp && error.codigo === 'no_encontrado')) throw error;
+        datos = datosVacios();
+      }
+      await guardarDatosTmdb(uid, item.id, datos);
+      setLista((actual) => actual.map((i) => (i.id === item.id ? { ...i, ...datos } : i)));
+    },
+    [exigirConexion, uid],
+  );
+
   const valor = useMemo(
     () => ({
       usuario,
@@ -143,8 +183,22 @@ export function CarteleraProvider({ usuario, children }: { usuario: Usuario; chi
       agregar,
       actualizar,
       eliminar,
+      migrarFechas,
+      completarDatos,
     }),
-    [usuario, lista, cargando, sinConexion, sincronizar, obtenerItem, agregar, actualizar, eliminar],
+    [
+      usuario,
+      lista,
+      cargando,
+      sinConexion,
+      sincronizar,
+      obtenerItem,
+      agregar,
+      actualizar,
+      eliminar,
+      migrarFechas,
+      completarDatos,
+    ],
   );
 
   return <CarteleraContext.Provider value={valor}>{children}</CarteleraContext.Provider>;

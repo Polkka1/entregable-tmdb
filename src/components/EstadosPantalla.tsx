@@ -15,11 +15,19 @@ export function Cargando({ texto = 'Cargando…' }: { texto?: string }) {
   );
 }
 
-export function MensajeError({ mensaje, onReintentar }: { mensaje: string; onReintentar?: () => void }) {
+export function MensajeError({
+  mensaje,
+  onReintentar,
+  titulo = 'Algo salió mal',
+}: {
+  mensaje: string;
+  onReintentar?: () => void;
+  titulo?: string;
+}) {
   return (
     <View style={styles.centro} accessibilityLiveRegion="assertive">
       <Icono name="alert-circle-outline" size={48} color={colores.peligro} />
-      <Text style={styles.titulo}>Algo salió mal</Text>
+      <Text style={styles.titulo}>{titulo}</Text>
       <Text style={styles.descripcion}>{mensaje}</Text>
       {onReintentar && (
         <View style={styles.accion}>

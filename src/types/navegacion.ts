@@ -6,6 +6,7 @@ import type { TipoMedio } from './lista';
 export type TabsParamList = {
   Buscar: undefined;
   MiLista: undefined;
+  MiAnio: undefined;
   AcercaDe: undefined;
 };
 

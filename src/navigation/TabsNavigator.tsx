@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icono, type NombreIcono } from '../components/Icono';
 import { AcercaDeScreen } from '../screens/AcercaDeScreen';
 import { BuscarScreen } from '../screens/BuscarScreen';
+import { MiAnioScreen } from '../screens/MiAnioScreen';
 import { MiListaScreen } from '../screens/MiListaScreen';
 import { colores } from '../tema/tema';
 import type { TabsParamList } from '../types/navegacion';
@@ -11,6 +12,7 @@ const Tabs = createBottomTabNavigator<TabsParamList>();
 const ICONO_PESTANA: Record<keyof TabsParamList, { activo: NombreIcono; inactivo: NombreIcono }> = {
   Buscar: { activo: 'search', inactivo: 'search-outline' },
   MiLista: { activo: 'bookmark', inactivo: 'bookmark-outline' },
+  MiAnio: { activo: 'calendar', inactivo: 'calendar-outline' },
   AcercaDe: { activo: 'information-circle', inactivo: 'information-circle-outline' },
 };
 
@@ -28,6 +30,11 @@ export function TabsNavigator() {
     >
       <Tabs.Screen name="Buscar" component={BuscarScreen} options={{ title: 'Buscar' }} />
       <Tabs.Screen name="MiLista" component={MiListaScreen} options={{ title: 'Mi lista' }} />
+      <Tabs.Screen
+        name="MiAnio"
+        component={MiAnioScreen}
+        options={{ title: 'Mi año en cine', tabBarLabel: 'Mi año' }}
+      />
       <Tabs.Screen name="AcercaDe" component={AcercaDeScreen} options={{ title: 'Acerca de' }} />
     </Tabs.Navigator>
   );

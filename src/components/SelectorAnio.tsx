@@ -14,6 +14,8 @@ export function SelectorAnio({ anios, seleccionado, onCambiar }: Props) {
   return (
     <ScrollView
       horizontal
+      // Un ScrollView crece por defecto: sin esto, con poco contenido los chips se estiran en alto.
+      style={styles.contenedor}
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.fila}
       accessibilityRole="radiogroup"
@@ -33,6 +35,9 @@ export function SelectorAnio({ anios, seleccionado, onCambiar }: Props) {
 }
 
 const styles = StyleSheet.create({
+  contenedor: {
+    flexGrow: 0,
+  },
   fila: {
     gap: espacio.sm,
   },

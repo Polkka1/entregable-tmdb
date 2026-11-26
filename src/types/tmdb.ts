@@ -46,6 +46,12 @@ export interface TmdbMiembroElenco {
   order: number;
 }
 
+/** Integrante del equipo técnico; los directores tienen job === 'Director'. */
+export interface TmdbMiembroEquipo {
+  name: string;
+  job: string;
+}
+
 interface TmdbDetalleBase {
   id: number;
   poster_path: string | null;
@@ -54,7 +60,7 @@ interface TmdbDetalleBase {
   vote_count: number;
   genres: { id: number; name: string }[];
   /** Llega en la misma petición gracias a append_to_response=credits */
-  credits?: { cast: TmdbMiembroElenco[] };
+  credits?: { cast: TmdbMiembroElenco[]; crew?: TmdbMiembroEquipo[] };
 }
 
 export interface TmdbDetallePelicula extends TmdbDetalleBase {
@@ -119,6 +125,10 @@ export interface DetalleObra {
   /** Duración de la película o número de temporadas de la serie */
   infoAdicional: string | null;
   elenco: MiembroElenco[];
+  /** Duración en minutos (solo películas; null en series o si TMDB no la trae). D5 */
+  duracionMin: number | null;
+  /** Directores (solo películas; vacía en series). D5 */
+  directores: string[];
 }
 
 /** Dónde se va a mostrar una imagen; define el tamaño que se pide a TMDB. */

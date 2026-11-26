@@ -12,6 +12,7 @@ import type {
   TmdbDetallePelicula,
   TmdbDetalleSerie,
   TmdbMiembroElenco,
+  TmdbMiembroEquipo,
   TmdbPagina,
   TmdbResultadoMulti,
   TmdbResultadoPelicula,
@@ -149,6 +150,11 @@ function mapearElenco(cast: TmdbMiembroElenco[] | undefined): MiembroElenco[] {
     .map((m) => ({ id: m.id, nombre: m.name, personaje: m.character || null, fotoPath: m.profile_path }));
 }
 
+/** D5: nombres de los directores, que en TMDB son los miembros del equipo con job === 'Director'. */
+function mapearDirectores(crew: TmdbMiembroEquipo[] | undefined): string[] {
+  return (crew ?? []).filter((m) => m.job === 'Director').map((m) => m.name);
+}
+
 function textoOpcional(texto: string | null | undefined): string | null {
   const limpio = texto?.trim();
   return limpio ? limpio : null;
@@ -167,6 +173,8 @@ function mapearPelicula(d: TmdbDetallePelicula): DetalleObra {
     generos: d.genres.map((g) => g.name),
     infoAdicional: d.runtime ? formatearDuracion(d.runtime) : null,
     elenco: mapearElenco(d.credits?.cast),
+    duracionMin: d.runtime ?? null,
+    directores: mapearDirectores(d.credits?.crew),
   };
 }
 
@@ -184,6 +192,8 @@ function mapearSerie(d: TmdbDetalleSerie): DetalleObra {
     generos: d.genres.map((g) => g.name),
     infoAdicional: temporadas ? `${temporadas} ${temporadas === 1 ? 'temporada' : 'temporadas'}` : null,
     elenco: mapearElenco(d.credits?.cast),
+    duracionMin: null,
+    directores: [],
   };
 }
 

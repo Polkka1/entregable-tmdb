@@ -109,10 +109,18 @@ export function CarteleraProvider({ usuario, children }: { usuario: Usuario; chi
   const actualizar = useCallback(
     async (itemId: string, cambios: CambiosEntrada) => {
       exigirConexion();
-      const guardados = await actualizarItem(uid, itemId, cambios);
-      setLista((actual) => actual.map((i) => (i.id === itemId ? { ...i, ...guardados } : i)));
+      const anterior = lista.find((i) => i.id === itemId);
+      if (!anterior) throw new ErrorApp('not-found', 'Esta obra ya no está en tu lista.');
+      const resultado = await actualizarItem(uid, itemId, cambios, anterior.estado);
+      // D1: el servidor guarda su propia hora. Hasta la próxima sincronización, la copia local usa la
+      // del teléfono (la diferencia es de segundos; spec 01 §11).
+      const vistaEn = (i: ItemLista) =>
+        resultado.vistaEn === 'asignar' ? Date.now() : resultado.vistaEn === 'borrar' ? null : i.vistaEn;
+      setLista((actual) =>
+        actual.map((i) => (i.id === itemId ? { ...i, ...resultado.cambios, vistaEn: vistaEn(i) } : i)),
+      );
     },
-    [exigirConexion, uid],
+    [exigirConexion, lista, uid],
   );
 
   const eliminar = useCallback(

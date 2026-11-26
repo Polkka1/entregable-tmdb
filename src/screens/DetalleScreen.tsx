@@ -5,6 +5,7 @@ import { Cargando, MensajeError } from '../components/EstadosPantalla';
 import { Icono } from '../components/Icono';
 import { Poster } from '../components/Poster';
 import { useCartelera } from '../context/CarteleraContext';
+import { datosParaGuardar } from '../dominio/datosTmdb';
 import { usePeticion } from '../hooks/usePeticion';
 import { obtenerDetalle } from '../services/tmdbService';
 import { colores, espacio } from '../tema/tema';
@@ -60,6 +61,8 @@ function ContenidoDetalle({ obra, onEditar }: { obra: DetalleObra; onEditar: (it
         titulo: obra.titulo,
         anio: obra.anio,
         posterPath: obra.posterPath,
+        // D5: géneros, duración y directores, normalizados como los aceptan las reglas.
+        ...datosParaGuardar(obra.tipo, obra),
       });
     } catch (error) {
       Alert.alert('No se pudo agregar', mensajeDeError(error));

@@ -34,8 +34,8 @@ export interface DatosTmdb {
   directores: string[];
 }
 
-/** Datos copiados de TMDB al agregar una obra a la lista. */
-export type NuevaEntrada = Pick<ItemLista, 'tmdbId' | 'tipo' | 'titulo' | 'anio' | 'posterPath'>;
+/** Datos copiados de TMDB al agregar una obra a la lista (D5: incluye géneros, duración y directores). */
+export type NuevaEntrada = Pick<ItemLista, 'tmdbId' | 'tipo' | 'titulo' | 'anio' | 'posterPath'> & DatosTmdb;
 
 /** Campos que el usuario puede editar en su entrada. */
 export type CambiosEntrada = Pick<ItemLista, 'estado' | 'calificacionPersonal' | 'comentario'>;

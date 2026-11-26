@@ -21,12 +21,14 @@ import {
   ESTADO_INICIAL,
   TIPOS,
   type CambiosEntrada,
+  type DatosTmdb,
   type EstadoVisto,
   type ItemLista,
   type NuevaEntrada,
   type TipoMedio,
 } from '../types/lista';
 import { ErrorApp, conTiempoMaximo } from '../utils/errores';
+import { cambioVistaEn, type CambioVistaEn } from '../dominio/vistaEn';
 import { crearItemId, normalizarCambios } from '../utils/lista';
 import { db } from './firebase';
 
@@ -35,8 +37,9 @@ const TIEMPO_MAXIMO_MS = 10_000;
 const MENSAJE_TIEMPO = 'No se pudo contactar al servidor. Revisa tu conexión e intenta de nuevo.';
 
 /** Lo que se guarda en Firestore: el itemId es el id del documento, no un campo. */
-type CampoEpica = 'vistaEn' | 'generos' | 'duracionMin' | 'directores';
-type DocumentoItem = Omit<ItemLista, 'id' | CampoEpica> & { agregadoEn: FieldValue; actualizadoEn: FieldValue };
+/** Al crear, la obra está en por_ver: no lleva vistaEn (D1). Los datos de TMDB sí (D5). */
+type DocumentoItem = Omit<ItemLista, 'id' | 'vistaEn' | keyof DatosTmdb> &
+  DatosTmdb & { agregadoEn: FieldValue; actualizadoEn: FieldValue };
 
 const MENSAJE_ERROR_FIRESTORE: Record<string, string> = {
   'permission-denied': 'No tienes permiso para realizar esta acción.',
@@ -115,7 +118,7 @@ export function agregarItem(uid: string, entrada: NuevaEntrada): Promise<ItemLis
     if ((await getDoc(ref)).exists()) {
       throw new ErrorApp('duplicado', 'Esta obra ya está en tu lista.');
     }
-    const datos: Omit<ItemLista, 'id' | CampoEpica> = {
+    const datos: Omit<DocumentoItem, 'agregadoEn' | 'actualizadoEn'> = {
       ...entrada,
       estado: ESTADO_INICIAL,
       calificacionPersonal: null,
@@ -123,15 +126,34 @@ export function agregarItem(uid: string, entrada: NuevaEntrada): Promise<ItemLis
     };
     const documento: DocumentoItem = { ...datos, agregadoEn: serverTimestamp(), actualizadoEn: serverTimestamp() };
     await setDoc(ref, documento);
-    return { ...datos, id, vistaEn: null, generos: null, duracionMin: null, directores: null };
+    return { ...datos, id, vistaEn: null };
   });
 }
 
-export function actualizarItem(uid: string, itemId: string, cambios: CambiosEntrada): Promise<CambiosEntrada> {
+export interface ResultadoActualizacion {
+  cambios: CambiosEntrada;
+  /** D1: qué se hizo con vistaEn */
+  vistaEn: CambioVistaEn;
+}
+
+/** Guarda los cambios de la entrada. D1: al pasar a vista guarda vistaEn con la hora del servidor; al salir, la borra. */
+export function actualizarItem(
+  uid: string,
+  itemId: string,
+  cambios: CambiosEntrada,
+  estadoAnterior: EstadoVisto,
+): Promise<ResultadoActualizacion> {
   return ejecutar(async () => {
     const normalizados = normalizarCambios(cambios);
-    await updateDoc(documentoItem(uid, itemId), { ...normalizados, actualizadoEn: serverTimestamp() });
-    return normalizados;
+    const vistaEn = cambioVistaEn(estadoAnterior, normalizados.estado);
+    const campoVistaEn =
+      vistaEn === 'asignar' ? { vistaEn: serverTimestamp() } : vistaEn === 'borrar' ? { vistaEn: null } : {};
+    await updateDoc(documentoItem(uid, itemId), {
+      ...normalizados,
+      ...campoVistaEn,
+      actualizadoEn: serverTimestamp(),
+    });
+    return { cambios: normalizados, vistaEn };
   });
 }
 

@@ -132,10 +132,10 @@ spec 01, la spec 02 y `docs/VERIFICACION.md`.
 
 | Id | Hallazgo | Evidencia | Gravedad | Decisión |
 |---|---|---|---|---|
-| F-01 | En el año vacío, los chips del selector se estiraban hasta media pantalla | `docs/resumen-vacio.jpeg`; `SelectorAnio.tsx` (el `ScrollView` crece por defecto) | Media | Corregido en `ddd833e` (`flexGrow: 0`). Hay que repetir la captura |
+| F-01 | En el año vacío, los chips del selector se estiraban hasta media pantalla | `docs/resumen-vacio.jpeg`; `SelectorAnio.tsx` (el `ScrollView` crece por defecto) | Media | Corregido en `ddd833e` (`flexGrow: 0`) y verificado con la captura nueva |
 | F-02 | Las obras que fallan al completarse (D6) solo se reintentan al reiniciar la app: las pestañas no se desmontan, y el hook las marca como intentadas por montaje | `useResumenAnual.ts` (`intentadas`) | Baja | Riesgo conocido. PA-3 se cumple al reabrir la app |
 | F-03 | Tras D1, la copia local usa la hora del teléfono hasta la próxima sincronización | `CarteleraContext.actualizar` | Baja | Riesgo conocido (spec 01 §11) |
-| F-04 | HU-A.4 (migración D2 y reintentos) no se verificó a mano con una obra anterior a la épica. Hay evidencia indirecta de D6: el resumen de 2025 suma 14,9 h, que incluyen los 139 min de *El club de la lucha*, sembrada sin datos | `docs/VERIFICACION.md` §3 (HU-A.4), `docs/resumen-con-datos.jpeg` | Media | Repetir con `scripts/sembrarDatosPrueba.mjs` (grupo "anterior a la épica"). La lógica de D2 tiene tests (`obrasSinFecha`) |
+| F-04 | HU-A.4 (migración D2 y reintentos) no se había verificado a mano, porque no había obras anteriores a la épica | `docs/VERIFICACION.md` §3 (HU-A.4) | Media | Resuelto: con `scripts/sembrarDatosPrueba.mjs` se verificaron CA-A.4.1 a CA-A.4.10 en el teléfono (✅). CA-A.5.2 queda "No probado", porque un error del servidor no se puede provocar a mano |
 | F-05 | Con D4, el único año que puede estar vacío en el selector es el actual; para mostrar D12 hace falta una cuenta sin obras vistas este año | PRD §7.3 (D4, D12) | Baja | Anotado en VERIFICACION §0; la demo usa cuenta2 |
 | F-06 | `npm` reporta 13 vulnerabilidades (8 moderadas y 5 altas) en dependencias transitivas | Salida de `npm install` | Baja | Riesgo conocido: `npm audit fix` puede romper las versiones del SDK 58 |
 | F-07 | El Proyecto 3 no tenía obras guardadas antes de la épica en las cuentas de prueba, así que D2 y D6 no se podían probar sin preparar datos | VERIFICACION §4 | Baja | Se agregó `scripts/sembrarDatosPrueba.mjs` (`286e018`) |
